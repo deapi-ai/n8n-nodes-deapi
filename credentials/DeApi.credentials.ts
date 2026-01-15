@@ -9,7 +9,8 @@ import type {
 export class DeApi implements ICredentialType {
 	name = 'deApi';
 
-	displayName = 'deAPI Account API';
+  // TO REMOVE linter rules, which enforces that API string appended.
+	displayName = 'deAPI API';
 
 	documentationUrl = 'https://docs.deapi.ai/quickstart#2-obtain-your-api-key';
 
@@ -30,15 +31,15 @@ export class DeApi implements ICredentialType {
 		type: 'generic',
 		properties: {
       headers: {
-				Authorization: 'Bearer {{$credentials.apiKey}}',
+				Authorization: '=Bearer {{$credentials.apiKey}}',
 			},
 		},
 	};
 
 	test: ICredentialTestRequest = {
 		request: {
-      url: 'https://api.deapi.ai/api/v1/client',
-			baseURL: '/models?per_page=15&page=1',
+      baseURL: 'https://api.deapi.ai/api/v1/client',
+      url: '/models?per_page=15&page=1',
       headers: {
         Accept: 'application/json',
       },

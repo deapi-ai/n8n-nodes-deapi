@@ -20,6 +20,12 @@ export class Deapi implements INodeType {
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
+    credentials: [
+      {
+        name: 'deApi',
+        required: true,
+      },
+    ],
 		properties: [
 			// Node properties which the user gets displayed and
 			// can change on the node.
