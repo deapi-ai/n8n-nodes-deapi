@@ -11,15 +11,16 @@ export class Deapi implements INodeType {
 		displayName: 'deAPI',
 		name: 'deapi',
 		icon: 'file:deapi.svg',
-		group: ['input'],
+		group: ['transform'],
 		version: 1,
-		description: 'Basic Example Node',
+		description: 'Interact with deAPI models',
 		defaults: {
-			name: 'Example',
+			name: 'deAPI',
 		},
+    usableAsTool: true,
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
-		usableAsTool: true,
+    // TODO: codex field
     credentials: [
       {
         name: 'deApi',
