@@ -1,4 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { updateDisplayOptions } from 'n8n-workflow';
 
 const properties: INodeProperties[] = [
   {
@@ -139,3 +140,12 @@ const properties: INodeProperties[] = [
     ]
   }
 ];
+
+const displayOptions = {
+	show: {
+		operation: ['generate'],
+		resource: ['image'],
+	},
+};
+
+export const description = updateDisplayOptions(displayOptions, properties);
