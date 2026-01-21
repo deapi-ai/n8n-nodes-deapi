@@ -50,5 +50,5 @@ export async function apiRequest(
     Object.assign(options, option);
   }
 
-  return await this.helpers.requestWithAuthentication.call(this, 'deApi', options);
+  return await this.helpers.httpRequestWithAuthentication.call(this, 'deApi', options);
 }
