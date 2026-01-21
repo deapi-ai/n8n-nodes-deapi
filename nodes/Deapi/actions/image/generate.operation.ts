@@ -47,6 +47,27 @@ const properties: INodeProperties[] = [
     ],
   },
   {
+    displayName: 'Ratio',
+    name: 'ratio',
+    type: 'options',
+    description: 'Aspect ratio of the generated image',
+    options: [
+      {
+        name: '1:1',
+        value: '1:1',
+      },
+      {
+        name: '16:9',
+        value: '16:9',
+      },
+      {
+        name: '9:16',
+        value: '9:16',
+      },
+    ],
+    default: '1:1',
+  },
+  {
     displayName: 'Options',
     name: 'options',
     placeholder: 'Add Option',
@@ -82,13 +103,17 @@ const properties: INodeProperties[] = [
       // },
       {
         displayName: 'Resolution',
-        name: 'size',
+        name: 'square_size',
         type: 'options',
-        description: 'Height and width of the generated image in pixels',
+        description: 'Width and height of the generated image in pixels',
         options: [
           {
             name: '256x256',
             value: '256x256',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
           },
           {
             name: '768x768',
@@ -106,9 +131,94 @@ const properties: INodeProperties[] = [
         displayOptions: {
           show: {
             '/model': ['ZImageTurbo_INT8', 'Flux1schnell'],
+            '/ratio': ['1:1'],
           },
         },
         default: '768x768',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'ZImageTurbo_INT8_landscape_size',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '2048x1152',
+            value: '2048x1152',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['ZImageTurbo_INT8'],
+            '/ratio': ['16:9'],
+          },
+        },
+        default: '2048x1152',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Flux1schnell_landscape_size',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1280x720',
+            value: '1280x720',
+          },
+          {
+            name: '2048x1152',
+            value: '2048x1152',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux1schnell'],
+            '/ratio': ['16:9'],
+          },
+        },
+        default: '1280x720',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'ZImageTurbo_INT8_portrait_size',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1152x2048',
+            value: '1152x2048',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['ZImageTurbo_INT8'],
+            '/ratio': ['9:16'],
+          },
+        },
+        default: '1152x2048',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Flux1schnell_portrait_size',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '720x1280',
+            value: '720x1280',
+          },
+          {
+            name: '1152x2048',
+            value: '1152x2048',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux1schnell'],
+            '/ratio': ['9:16'],
+          },
+        },
+        default: '720x1280',
       },
       {
         displayName: 'Steps',
@@ -150,7 +260,7 @@ const properties: INodeProperties[] = [
         type: 'number',
         description: 'Random seed for generation. By default seed is random.',
         typeOptions: {
-          maxValue: 10000,
+          maxValue: Number.MAX_SAFE_INTEGER,
           minValue: -1,
           numberPrecision: 0,
         },
