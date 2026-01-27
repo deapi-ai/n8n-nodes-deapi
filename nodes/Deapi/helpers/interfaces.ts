@@ -14,14 +14,24 @@ export interface TextToImageRequest extends IDataObject {
   seed: number,
 }
 
-export interface Response extends IDataObject {
+export interface BoostTextToImagePromptRequest extends IDataObject {
+  prompt: string,
+  negative_prompt: string,
+}
+
+export interface GenerationResponse extends IDataObject {
   data: Data,
 }
 
-export interface StatusResponse {
-  status: string,
-  preview: string,
-  result_url: string,
-  result: string,
-  progress: number,
+export interface BoosterResponse extends IDataObject {
+  prompt: string,
+  negative_prompt?: string,
 }
+
+// export interface StatusResponse {
+//   status: string,
+//   preview: string,
+//   result_url: string,
+//   result: string,
+//   progress: number,
+// }

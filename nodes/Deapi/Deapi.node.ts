@@ -6,6 +6,7 @@ import type {
 import { NodeConnectionTypes } from 'n8n-workflow';
 
 import * as image from './actions/image';
+import * as prompt from './actions/prompt';
 import { router } from './actions/router';
 
 export class Deapi implements INodeType {
@@ -50,11 +51,16 @@ export class Deapi implements INodeType {
           {
             name: 'Audio',
             value: 'audio',
-          }
+          },
+          {
+            name: 'Prompt',
+            value: 'prompt',
+          },
         ],
         default: 'image',
       },
       ...image.description,
+      ...prompt.description,
 		],
 	};
 

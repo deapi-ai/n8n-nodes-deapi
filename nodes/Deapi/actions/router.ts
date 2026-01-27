@@ -6,6 +6,7 @@ import {
 
 import type { DeApiType } from './node.type';
 import * as image from './image';
+import * as prompt from './prompt';
 
 export async function router(this: IExecuteFunctions) {
   const returnData: INodeExecutionData[] = [];
@@ -23,6 +24,9 @@ export async function router(this: IExecuteFunctions) {
   switch (deApiTypeData.resource) {
     case 'image':
       execute = image[deApiTypeData.operation].execute;
+      break;
+    case 'prompt':
+      execute = prompt[deApiTypeData.operation].execute;
       break;
     default:
       throw new NodeOperationError(
