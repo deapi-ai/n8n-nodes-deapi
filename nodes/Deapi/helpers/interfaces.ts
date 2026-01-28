@@ -16,7 +16,7 @@ export interface TextToImageRequest extends IDataObject {
 
 export interface ImagePromptBoosterRequest extends IDataObject {
   prompt: string,
-  negative_prompt: string,
+  negative_prompt?: string,
 }
 
 export interface GenerationResponse extends IDataObject {

@@ -21,19 +21,28 @@ const properties: INodeProperties[] = [
     description: 'A prompt to boost',
     default: '',
     typeOptions: {
-      rows: 2,
+      rows: 1,
     },
   },
   {
-    displayName: 'Negative Prompt',
-    name: 'negative_prompt',
-    type: 'string',
-    placeholder: 'e.g. blur, darkness, noise',
-    description: 'A negative prompt to boost',
-    default: '',
-    typeOptions: {
-      rows: 1,
-    },
+    displayName: 'Options',
+    name: 'options',
+    placeholder: 'Add Option',
+    type: 'collection',
+    default: {},
+    options: [
+      {
+        displayName: 'Negative Prompt',
+        name: 'negative_prompt',
+        type: 'string',
+        placeholder: 'e.g. blur, darkness, noise',
+        description: 'A negative prompt to boost',
+        default: '',
+        typeOptions: {
+          rows: 1,
+        },
+      },
+    ],
   },
 ];
 
@@ -49,11 +58,14 @@ export const description = updateDisplayOptions(displayOptions, properties);
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 
   const prompt = this.getNodeParameter('prompt', i) as string;
-  const negativePrompt = this.getNodeParameter('negative_prompt', i) as string;
+  const negativePrompt = this.getNodeParameter('options', i).negative_prompt as string;
+
+  // It doesn't consider the case where `prompt` or `negativePrompt`
+  // don't have at least 3 characters. In this case, error from api is received.
 
   const body: ImagePromptBoosterRequest = {
     prompt: prompt,
-    negative_prompt: negativePrompt,
+    negative_prompt: negativePrompt ?? null,
   };
 
   const response = await (apiRequest.call(this, 'POST', '/prompt/image', { body })) as BoosterResponse;
