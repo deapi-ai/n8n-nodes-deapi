@@ -8,8 +8,8 @@ import type {
 } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
 
-import { verifyWebhookSignature } from '../Deapi/helpers/webhook-verification';
-import { downloadAndPrepareBinaryData } from '../Deapi/helpers/binary-data';
+import { verifyWebhookSignature } from './helpers/webhook-verification';
+import { downloadAndPrepareBinaryData } from './helpers/binary-data';
 
 export class DeapiTrigger implements INodeType {
 	description: INodeTypeDescription = {
