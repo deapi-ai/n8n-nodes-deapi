@@ -3,13 +3,17 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 	IWebhookFunctions,
+	IWebhookResponseData,
+	INodeExecutionData,
+	IDataObject,
 } from 'n8n-workflow';
 import { NodeConnectionTypes } from 'n8n-workflow';
 
 import * as image from './actions/image';
 import * as prompt from './actions/prompt';
 import { router } from './actions/router';
-import { webhook } from './webhook';
+import { verifyWebhookSignature } from './helpers/webhook-verification';
+import { downloadAndPrepareBinaryData } from './helpers/binary-data';
 
 export class Deapi implements INodeType {
 	description: INodeTypeDescription = {
@@ -79,7 +83,80 @@ export class Deapi implements INodeType {
 		return await router.call(this);
 	}
 
-	async webhook(this: IWebhookFunctions) {
-		return await webhook.call(this);
+	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
+		// Get response object for sending HTTP responses
+		const res = this.getResponseObject();
+
+		// Get webhook credentials for signature verification
+		const credentials = await this.getCredentials('deApi');
+		const secret = credentials.webhookSecret as string;
+
+		// Get headers for verification
+		const headers = this.getHeaderData();
+		const signature = headers['x-deapi-signature'] as string;
+		const timestamp = headers['x-deapi-timestamp'] as string;
+
+		// Get request object for raw body and parsed body
+		const req = this.getRequestObject();
+		const rawBody = req.rawBody;
+		const body = req.body;
+
+		// Verify webhook signature
+		if (!verifyWebhookSignature(secret, signature, timestamp, rawBody)) {
+			res.status(401).send('Invalid signature');
+			return {
+				noWebhookResponse: true,
+			};
+		}
+
+		// Signature verified, proceed with webhook processing
+		const event = body.event as string;
+
+		// DeAPI sends three types of events:
+		// - job.processing: Job started processing (ignore, keep waiting)
+		// - job.completed: Job completed successfully (resume execution)
+		// - job.failed: Job failed (resume with error data)
+
+		// If this is just a processing notification, acknowledge but don't resume
+		if (event === 'job.processing') {
+			res.status(200).send('OK');
+			return {
+				noWebhookResponse: true, // Don't resume execution, keep waiting
+			};
+		}
+
+		// For completed jobs, download the binary result
+		if (event === 'job.completed') {
+			const data = body.data as IDataObject;
+			const resultUrl = data.result_url as string;
+
+			// Download and prepare binary data
+			const binaryData = await downloadAndPrepareBinaryData(this, resultUrl);
+
+			const response: INodeExecutionData = {
+				json: {},
+				binary: {
+					data: binaryData,
+				},
+			};
+
+			res.status(200).send('OK');
+
+			return {
+				workflowData: [[response]],
+			};
+		}
+
+		// For failed jobs, return error data as JSON
+		const response: INodeExecutionData = {
+			json: body,
+		};
+
+		res.status(200).send('OK');
+
+		// Return 200 OK and resume execution with the webhook data
+		return {
+			workflowData: [[response]],
+		};
 	}
 }
