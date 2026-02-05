@@ -32,8 +32,7 @@
         "n8nNodesApiVersion": 1,
         "strict": true,
         "credentials": [
-            "credentials/DeApi.credentials.ts",
-            "credentials/DeApiWebhook.credentials.ts"
+            "credentials/DeApi.credentials.ts"
         ],
         "nodes": [
             "dist/nodes/Example/Example.node.js"
