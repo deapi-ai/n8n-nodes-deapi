@@ -74,7 +74,9 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
   // Prepare text fields
   const fields = [
+    // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
     { name: 'prompt', value: prompt },
+    // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
     { name: 'negative_prompt', value: negativePrompt ?? '' },
   ];
 
