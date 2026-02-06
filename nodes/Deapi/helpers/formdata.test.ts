@@ -1,3 +1,4 @@
+/* eslint-disable n8n-nodes-base/node-param-display-name-miscased */
 import { generateFormdataBody } from './formdata';
 
 describe('generateFormdataBody', () => {
