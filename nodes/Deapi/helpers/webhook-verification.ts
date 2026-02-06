@@ -28,8 +28,13 @@ export function verifyWebhookSignature(
     .update(message)
     .digest('hex');
 
+  // Verify signature exists and has correct length
+  if (!signature || signature.length !== expected.length) {
+    return false;
+  }
+
   // Timing-safe comparison
-  if (!signature || !crypto.timingSafeEqual(
+  if (!crypto.timingSafeEqual(
     Buffer.from(signature),
     Buffer.from(expected)
   )) {
