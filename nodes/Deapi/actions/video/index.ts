@@ -1,8 +1,8 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-import * as generate from './generate.operation';
+import * as generateFromText from './generate-from-text.operation';
 
-export { generate };
+export { generateFromText };
 
 export const description: INodeProperties[] = [
   {
@@ -12,18 +12,18 @@ export const description: INodeProperties[] = [
     noDataExpression: true,
     options: [
       {
-        name: 'Generate a Video',
-        value: 'generate',
-        action: 'Generate a video',
+        name: 'Generate a Video From Text',
+        value: 'generateFromText',
+        action: 'Generate a video from text',
         description: 'Generates a video from a text prompt'
       },
     ],
-    default: 'generate',
+    default: 'generateFromText',
     displayOptions: {
       show: {
         resource: ['video'],
       },
     },
   },
-  ...generate.description,
+  ...generateFromText.description,
 ];

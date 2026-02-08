@@ -207,7 +207,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
 	show: {
-		operation: ['generate'],
+		operation: ['generateFromText'],
 		resource: ['video'],
 	},
 };

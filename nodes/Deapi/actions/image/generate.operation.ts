@@ -372,7 +372,7 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   // Build the request body with webhook URL
   const body: TextToImageRequest = {
     prompt: prompt,
-    negative_prompt: negativePrompt ?? null,
+    negative_prompt: negativePrompt,
     model: model,
     width: width,
     height: height,

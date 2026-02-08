@@ -7,7 +7,7 @@ type Data = {
 
 export interface TextToImageRequest extends IDataObject {
   prompt: string,
-  negative_prompt: string | null,
+  negative_prompt?: string,
   model: string,
   width: number,
   height: number,
