@@ -17,7 +17,7 @@ const properties: INodeProperties[] = [
     type: 'string',
     required: true,
     placeholder: 'e.g. A cinematic video sequence',
-    description: 'A prompt to boost',
+    description: 'A prompt to boost for video generation',
     default: '',
     typeOptions: {
       rows: 1,
@@ -55,7 +55,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
 	show: {
-		operation: ['videoPromptBooster'],
+		operation: ['boostVideo'],
 		resource: ['prompt'],
 	},
 };

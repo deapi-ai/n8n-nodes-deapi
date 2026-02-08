@@ -18,7 +18,7 @@ const properties: INodeProperties[] = [
     type: 'string',
     required: true,
     placeholder: 'e.g. Red Bull F1 car from 2025',
-    description: 'A prompt to boost',
+    description: 'A prompt to boost for image generation',
     default: '',
     typeOptions: {
       rows: 1,
@@ -48,7 +48,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
 	show: {
-		operation: ['imagePromptBooster'],
+		operation: ['boostImage'],
 		resource: ['prompt'],
 	},
 };
