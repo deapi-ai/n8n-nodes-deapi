@@ -10,6 +10,7 @@ import type {
 import { NodeConnectionTypes } from 'n8n-workflow';
 
 import * as image from './actions/image';
+import * as video from './actions/video';
 import * as prompt from './actions/prompt';
 import { router } from './actions/router';
 import { verifyWebhookSignature } from './helpers/webhook-verification';
@@ -75,6 +76,7 @@ export class Deapi implements INodeType {
         default: 'image',
       },
       ...image.description,
+      ...video.description,
       ...prompt.description,
 		],
 	};

@@ -29,6 +29,7 @@ const properties: INodeProperties[] = [
     type: 'options',
     description: 'The model to use for image generation',
     default: 'ZImageTurbo_INT8',
+    required: true,
     options: [
       {
         name: 'Z-Image-Turbo INT8',
@@ -45,6 +46,7 @@ const properties: INodeProperties[] = [
     name: 'ratio',
     type: 'options',
     description: 'Aspect ratio of the generated image',
+    required: true,
     options: [
       {
         name: 'Square',
