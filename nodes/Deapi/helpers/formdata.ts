@@ -1,52 +1,44 @@
-interface FormdataField {
-  name: string;
-  value: string;
-}
-
-interface FormdataFile {
-  name: string;
+export interface FormdataFileValue {
   filename: string;
   contentType: string;
   content: Buffer;
 }
 
+export type FormdataValue = string | FormdataFileValue | null;
+
 /**
- * Generates a multipart/form-data body as a Buffer.
- * Files must be provided as Buffers (already loaded into memory).
+ * Generates a multipart/form-data body as a Buffer from a typed request object.
+ * String values become text fields, FormdataFileValue objects become file fields,
+ * null values become empty string text fields.
  *
  * @param boundary - The boundary string to use for multipart/form-data
- * @param fields - Array of text fields to include
- * @param files - Array of file fields to include (with Buffer content)
+ * @param request - Object mapping field names to values
  * @returns A Buffer containing the complete multipart/form-data body
  */
 export function generateFormdataBody(
   boundary: string,
-  fields: FormdataField[],
-  files: FormdataFile[] = [],
+  request: Record<string, FormdataValue>,
 ): Buffer {
   const parts: Buffer[] = [];
 
-  // Add text fields
-  for (const field of fields) {
-    parts.push(Buffer.from(
-      `--${boundary}\r\n` +
-      `Content-Disposition: form-data; name="${field.name}"\r\n\r\n` +
-      `${field.value}\r\n`
-    ));
-  }
-
-  // Add file fields
-  for (const file of files) {
-    // Add file headers
-    parts.push(Buffer.from(
-      `--${boundary}\r\n` +
-      `Content-Disposition: form-data; name="${file.name}"; filename="${file.filename}"\r\n` +
-      `Content-Type: ${file.contentType}\r\n\r\n`
-    ));
-
-    // Add file content
-    parts.push(file.content);
-    parts.push(Buffer.from('\r\n'));
+  for (const [name, value] of Object.entries(request)) {
+    if (value === null || typeof value === 'string') {
+      // Text field
+      parts.push(Buffer.from(
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
+        `${value ?? ''}\r\n`
+      ));
+    } else {
+      // File field
+      parts.push(Buffer.from(
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="${name}"; filename="${value.filename}"\r\n` +
+        `Content-Type: ${value.contentType}\r\n\r\n`
+      ));
+      parts.push(value.content);
+      parts.push(Buffer.from('\r\n'));
+    }
   }
 
   // Add closing boundary

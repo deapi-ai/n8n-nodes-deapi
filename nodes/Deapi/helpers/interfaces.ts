@@ -1,4 +1,5 @@
 import { IDataObject } from "n8n-workflow";
+import type { FormdataFileValue } from "./formdata";
 
 type Data = {
   request_id: string,
@@ -28,3 +29,10 @@ export interface BoosterResponse extends IDataObject {
   prompt: string,
   negative_prompt: string | null,
 }
+
+/* Here stars types for form-data content type */
+export type VideoPromptBoosterRequest = {
+  prompt: string;
+  negative_prompt: string | null;
+  image: FormdataFileValue | null;
+};

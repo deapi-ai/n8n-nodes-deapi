@@ -8,7 +8,7 @@ import {
 import { apiRequest } from "../../transport";
 import { getBinaryDataFile } from '../../helpers/binary-data';
 import { generateFormdataBody } from '../../helpers/formdata';
-import { BoosterResponse } from "../../helpers/interfaces";
+import type { VideoPromptBoosterRequest, BoosterResponse } from "../../helpers/interfaces";
 
 const properties: INodeProperties[] = [
   {
@@ -69,35 +69,21 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   const negativePrompt = options.negative_prompt as (string | undefined);
   const refImage = options.binaryPropertyName as (string | undefined);
 
-  // Manually construct multipart/form-data body using streams (avoids loading large files into memory)
   const boundary = `----n8nFormBoundary${Date.now()}`;
 
-  // Prepare text fields
-  const fields = [
-    // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
-    { name: 'prompt', value: prompt },
-    // eslint-disable-next-line n8n-nodes-base/node-param-display-name-miscased
-    { name: 'negative_prompt', value: negativePrompt ?? '' },
-  ];
-
-  // Prepare file fields
-  const files = [];
+  let image: VideoPromptBoosterRequest['image'] = null;
   if (refImage) {
     const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, refImage);
-
-    files.push({
-      name: 'image',
-      filename: filename || 'file',
-      contentType,
-      content: fileContent,
-    });
-  } else {
-    // Add empty image field if no file provided
-    fields.push({ name: 'image', value: '' });
+    image = { filename: filename || 'file', contentType, content: fileContent };
   }
 
-  // Generate the multipart/form-data body as a Buffer
-  const body = generateFormdataBody(boundary, fields, files);
+  const request: VideoPromptBoosterRequest = {
+    prompt,
+    negative_prompt: negativePrompt ?? null,
+    image,
+  };
+
+  const body = generateFormdataBody(boundary, request);
 
   // Send request with streamed multipart body using apiRequest
   const response = await apiRequest.call(this, 'POST', '/prompt/video', {
