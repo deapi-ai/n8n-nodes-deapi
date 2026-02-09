@@ -4,11 +4,11 @@ export interface FormdataFileValue {
   content: Buffer;
 }
 
-export type FormdataValue = string | FormdataFileValue | null;
+type FormdataValue = string | number | FormdataFileValue | null;
 
 /**
  * Generates a multipart/form-data body as a Buffer from a typed request object.
- * String values become text fields, FormdataFileValue objects become file fields,
+ * String and number values become text fields, FormdataFileValue objects become file fields,
  * null values become empty string text fields.
  *
  * @param boundary - The boundary string to use for multipart/form-data
@@ -22,14 +22,7 @@ export function generateFormdataBody(
   const parts: Buffer[] = [];
 
   for (const [name, value] of Object.entries(request)) {
-    if (value === null || typeof value === 'string') {
-      // Text field
-      parts.push(Buffer.from(
-        `--${boundary}\r\n` +
-        `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
-        `${value ?? ''}\r\n`
-      ));
-    } else {
+    if (typeof value === 'object' && value !== null) {
       // File field
       parts.push(Buffer.from(
         `--${boundary}\r\n` +
@@ -38,6 +31,13 @@ export function generateFormdataBody(
       ));
       parts.push(value.content);
       parts.push(Buffer.from('\r\n'));
+    } else {
+      // Text field (string, number, null)
+      parts.push(Buffer.from(
+        `--${boundary}\r\n` +
+        `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
+        `${value ?? ''}\r\n`
+      ));
     }
   }
 

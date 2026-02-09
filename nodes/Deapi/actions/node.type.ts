@@ -2,7 +2,7 @@ import { AllEntities } from "n8n-workflow";
 
 type NodeMap = {
   image: 'generate';
-  video: 'generateFromText';
+  video: 'generateFromText' | 'generateFromImage';
   prompt: 'boostImage' | 'boostVideo';
 };
 
