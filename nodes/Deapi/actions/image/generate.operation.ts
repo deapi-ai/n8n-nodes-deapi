@@ -28,7 +28,7 @@ const properties: INodeProperties[] = [
     name: 'model',
     type: 'options',
     description: 'The model to use for image generation',
-    default: 'ZImageTurbo_INT8',
+    default: 'Flux_2_Klein_4B_BF16',
     required: true,
     options: [
       {
@@ -38,6 +38,10 @@ const properties: INodeProperties[] = [
       {
         name: 'Flux.1 Schnell',
         value: 'Flux1schnell'
+      },
+      {
+        name: 'FLUX.2 Klein 4B BF16',
+        value: 'Flux_2_Klein_4B_BF16'
       },
     ],
   },
@@ -73,13 +77,18 @@ const properties: INodeProperties[] = [
     options: [
       {
         displayName: 'Negative Prompt',
-        name: 'negative_prompt',
+        name: 'negativePrompt',
         type: 'string',
         placeholder: 'e.g. blur, darkness, noise',
         description: 'Elements to avoid in the generated image',
         default: '',
         typeOptions: {
           rows: 1,
+        },
+        displayOptions: {
+          show: {
+            '/model': ['Flux1schnell', 'ZImageTurbo_INT8'],
+          },
         },
       },
       {
@@ -116,6 +125,41 @@ const properties: INodeProperties[] = [
           },
         },
         default: '768x768',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Flux2SquareSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1024x1024',
+            value: '1024x1024',
+          },
+          {
+            name: '1536x1536',
+            value: '1536x1536',
+          },
+          {
+            name: '256x256',
+            value: '256x256',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
+          },
+          {
+            name: '768x768',
+            value: '768x768',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['square'],
+          },
+        },
+        default: '1024x1024',
       },
       {
         displayName: 'Resolution',
@@ -196,6 +240,29 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
+        name: 'Flux2LandscapeSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1280x720',
+            value: '1280x720',
+          },
+          {
+            name: '1536x864',
+            value: '1536x864',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['landscape'],
+          },
+        },
+        default: '1280x720',
+      },
+      {
+        displayName: 'Resolution',
         name: 'Flux1PortraitSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
@@ -216,6 +283,29 @@ const properties: INodeProperties[] = [
           },
         },
         default: '720x1280',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Flux2PortraitSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '768x960',
+            value: '768x960',
+          },
+          {
+            name: '1216x1520',
+            value: '1216x1520',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['portrait'],
+          },
+        },
+        default: '1216x1520',
       },
       {
         displayName: 'Resolution',
@@ -251,7 +341,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Steps',
-        name: 'Flux1schnell_steps',
+        name: 'Flux1Steps',
         type: 'number',
         description: 'Number of inference steps',
         typeOptions: {
@@ -268,7 +358,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Steps',
-        name: 'ZImageTurbo_INT8_steps',
+        name: 'ZImageSteps',
         type: 'number',
         description: 'Number of inference steps',
         typeOptions: {
@@ -310,7 +400,7 @@ export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
   // Combine these types for switch statements, to conclude default values when options aren't provided.
-  type Model = 'ZImageTurbo_INT8' | 'Flux1schnell';
+  type Model = 'ZImageTurbo_INT8' | 'Flux1schnell' | 'Flux_2_Klein_4B_BF16';
   type Ratio = 'square' | 'landscape' | 'portrait';
 
   const prompt = this.getNodeParameter('prompt', i) as string;
@@ -319,9 +409,12 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   const options = this.getNodeParameter('options', i);
 
   // Negative Prompt
-  const negativePrompt = options.negative_prompt as (string | undefined);
+  const negativePrompt = options.negativePrompt as (string | undefined);
 
   const size = (
+    options.Flux2SquareSize ??
+    options.Flux2LandscapeSize ??
+    options.Flux2PortraitSize ??
     options.ZImageSquareSize ??
     options.ZImageLandscapeSize ??
     options.ZImagePortraitSize ??
@@ -339,17 +432,26 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
         width = 768;
         height = 768;
         break;
+      case 'Flux_2_Klein_4B_BF16-square':
+        width = 1024;
+        height = 1024;
+        break;
       case 'ZImageTurbo_INT8-landscape':
         width = 2048;
         height = 1152;
         break;
       case 'Flux1schnell-landscape':
+      case 'Flux_2_Klein_4B_BF16-landscape':
         width = 1280;
         height = 720;
         break;
       case 'ZImageTurbo_INT8-portrait':
         width = 1152;
         height = 2048;
+        break;
+      case 'Flux_2_Klein_4B_BF16-portrait':
+        width = 1216;
+        height = 1520;
         break;
       case 'Flux1schnell-portrait':
       default:
@@ -363,15 +465,16 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
   // Steps
   let steps = (
-    options.ZImageTurbo_INT8_steps ??
-    options.Flux1schnell_steps
-  ) as number;
+    options.ZImageSteps ??
+    options.Flux1Steps
+  ) as (number | undefined);
   if (steps == null) {
     switch (model) {
       case 'ZImageTurbo_INT8':
         steps = 8;
         break;
       case 'Flux1schnell':
+      case 'Flux_2_Klein_4B_BF16':
         steps = 4;
         break;
     }
