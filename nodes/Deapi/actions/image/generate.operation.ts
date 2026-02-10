@@ -84,7 +84,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'square_size',
+        name: 'Flux1SquareSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -111,7 +111,7 @@ const properties: INodeProperties[] = [
         ],
         displayOptions: {
           show: {
-            '/model': ['ZImageTurbo_INT8', 'Flux1schnell'],
+            '/model': ['Flux1schnell'],
             '/ratio': ['square'],
           },
         },
@@ -119,7 +119,42 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'ZImageTurbo_INT8_landscape_size',
+        name: 'ZImageSquareSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1024x1024',
+            value: '1024x1024',
+          },
+          {
+            name: '2048x2048',
+            value: '2048x2048',
+          },
+          {
+            name: '256x256',
+            value: '256x256',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
+          },
+          {
+            name: '768x768',
+            value: '768x768',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['ZImageTurbo_INT8'],
+            '/ratio': ['square'],
+          },
+        },
+        default: '768x768',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'ZImageLandscapeSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -138,7 +173,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'Flux1schnell_landscape_size',
+        name: 'Flux1LandscapeSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -161,7 +196,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'Flux1schnell_portrait_size',
+        name: 'Flux1PortraitSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -184,7 +219,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'ZImageTurbo_INT8_portrait_size',
+        name: 'ZImagePortraitSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -285,20 +320,15 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
   // Negative Prompt
   const negativePrompt = options.negative_prompt as (string | undefined);
-  delete options.negative_prompt;
 
   const size = (
-    options.square_size ??
-    options.ZImageTurbo_INT8_landscape_size ??
-    options.ZImageTurbo_INT8_portrait_size ??
-    options.Flux1schnell_landscape_size ??
-    options.Flux1schnell_portrait_size
+    options.ZImageSquareSize ??
+    options.ZImageLandscapeSize ??
+    options.ZImagePortraitSize ??
+    options.Flux1SquareSize ??
+    options.Flux1LandscapeSize ??
+    options.Flux1PortraitSize
   ) as string;
-  delete options.Flux1schnell_portrait_size;
-  delete options.ZImageTurbo_INT8_portrait_size;
-  delete options.Flux1schnell_landscape_size;
-  delete options.ZImageTurbo_INT8_landscape_size;
-  delete options.square_size;
 
   // Width and height
   let width: number, height: number;
@@ -346,19 +376,15 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
         break;
     }
   }
-  delete options.Flux1schnell_steps;
-  delete options.ZImageTurbo_INT8_steps;
 
   // Seed
-  let seed = options.seed as number;
+  let seed = options.seed as (number | undefined);
   if (seed == null || seed === -1) {
     seed = Math.floor(Math.random() * 4_294_967_296);
   }
-  delete options.seed;
 
   // Get wait timeout configuration (in seconds)
-  const waitTimeout = (options.waitTimeout as number) || 60;
-  delete options.waitTimeout;
+  const waitTimeout = options.waitTimeout as (number | undefined) ?? 60;
 
   // Calculate wait time (convert seconds to milliseconds)
   const waitTill = new Date(Date.now() + waitTimeout * 1000);
