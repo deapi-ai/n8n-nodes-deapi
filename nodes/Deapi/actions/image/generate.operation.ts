@@ -268,12 +268,12 @@ const properties: INodeProperties[] = [
         description: 'Width and height of the generated image in pixels',
         options: [
           {
-            name: '720x1280',
-            value: '720x1280',
+            name: '1024x1280',
+            value: '1024x1280',
           },
           {
-            name: '1152x2048',
-            value: '1152x2048',
+            name: '1536x1920',
+            value: '1536x1920',
           },
         ],
         displayOptions: {
@@ -282,7 +282,7 @@ const properties: INodeProperties[] = [
             '/ratio': ['portrait'],
           },
         },
-        default: '720x1280',
+        default: '1024x1280',
       },
       {
         displayName: 'Resolution',
@@ -314,8 +314,16 @@ const properties: INodeProperties[] = [
         description: 'Width and height of the generated image in pixels',
         options: [
           {
-            name: '1152x2048',
-            value: '1152x2048',
+            name: '1600x2000',
+            value: '1600x2000',
+          },
+          {
+            name: '768x960',
+            value: '768x960',
+          },
+          {
+            name: '1216x1520',
+            value: '1216x1520',
           },
         ],
         displayOptions: {
@@ -324,7 +332,7 @@ const properties: INodeProperties[] = [
             '/ratio': ['portrait'],
           },
         },
-        default: '1152x2048',
+        default: '1216x1520',
       },
       {
         displayName: 'Seed',

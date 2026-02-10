@@ -129,16 +129,16 @@ const properties: INodeProperties[] = [
         description: 'Width and height of the generated video in pixels',
         options: [
           {
-            name: '432x768',
-            value: '432x768',
+            name: '614x768',
+            value: '614x768',
           },
           {
-            name: '360x640',
-            value: '360x640',
+            name: '512x640',
+            value: '512x640',
           },
           {
-            name: '288x512',
-            value: '288x512',
+            name: '410x512',
+            value: '410x512',
           },
         ],
         displayOptions: {
@@ -147,7 +147,7 @@ const properties: INodeProperties[] = [
             '/ratio': ['portrait'],
           },
         },
-        default: '288x512',
+        default: '410x512',
       },
       {
         displayName: 'Resolution',
