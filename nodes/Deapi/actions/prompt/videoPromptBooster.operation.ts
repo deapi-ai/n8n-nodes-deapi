@@ -69,8 +69,6 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   const negativePrompt = options.negative_prompt as (string | undefined);
   const refImage = options.binaryPropertyName as (string | undefined);
 
-  const boundary = `----n8nFormBoundary${Date.now()}`;
-
   let image: VideoPromptBoosterRequest['image'] = null;
   if (refImage) {
     const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, refImage);
@@ -83,6 +81,7 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
     image,
   };
 
+  const boundary = `----n8nFormBoundary${Date.now()}`;
   const body = generateFormdataBody(boundary, request);
 
   // Send request with streamed multipart body using apiRequest
