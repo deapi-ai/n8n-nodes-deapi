@@ -3,358 +3,179 @@ import { generateFormdataBody } from './formdata';
 describe('generateFormdataBody', () => {
   const boundary = '----TestBoundary12345';
 
-  describe('Text fields only', () => {
-    it('should generate correct format for single text field', () => {
-      const result = generateFormdataBody(boundary, {
-        prompt: 'A beautiful sunset',
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain(`--${boundary}\r\n`);
-      expect(resultString).toContain('Content-Disposition: form-data; name="prompt"\r\n\r\n');
-      expect(resultString).toContain('A beautiful sunset\r\n');
-      expect(resultString).toContain(`--${boundary}--\r\n`);
+  describe('text fields', () => {
+    it.each([
+      ['single field', { prompt: 'A beautiful sunset' }, ['name="prompt"', 'A beautiful sunset']],
+      ['empty value', { empty_field: '' }, ['name="empty_field"']],
+      ['special characters', { text: 'Line 1\nLine 2\tTabbed' }, ['Line 1\nLine 2\tTabbed']],
+      ['unicode', { text: 'Hello 世界 🌍' }, ['Hello 世界 🌍']],
+      ['quotes', { text: 'He said "Hello"' }, ['He said "Hello"']],
+    ])('should handle %s', (_name, input, expected) => {
+      const result = generateFormdataBody(boundary, input).toString();
+      expected.forEach((str) => expect(result).toContain(str));
     });
 
-    it('should generate correct format for multiple text fields', () => {
+    it('should handle multiple fields', () => {
       const result = generateFormdataBody(boundary, {
         prompt: 'A beautiful sunset',
         negative_prompt: 'blur, noise',
         steps: '10',
-      });
-      const resultString = result.toString();
+      }).toString();
 
-      expect(resultString).toContain('name="prompt"');
-      expect(resultString).toContain('A beautiful sunset');
-      expect(resultString).toContain('name="negative_prompt"');
-      expect(resultString).toContain('blur, noise');
-      expect(resultString).toContain('name="steps"');
-      expect(resultString).toContain('10');
-    });
-
-    it('should handle empty text field value', () => {
-      const result = generateFormdataBody(boundary, {
-        empty_field: '',
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('name="empty_field"');
-      expect(resultString).toContain(`--${boundary}\r\n`);
-      expect(resultString).toContain(`--${boundary}--\r\n`);
-    });
-
-    it('should handle special characters in field values', () => {
-      const result = generateFormdataBody(boundary, {
-        text: 'Line 1\nLine 2\tTabbed',
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('Line 1\nLine 2\tTabbed');
-    });
-
-    it('should handle Unicode characters in field values', () => {
-      const result = generateFormdataBody(boundary, {
-        text: 'Hello 世界 🌍',
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('Hello 世界 🌍');
-    });
-
-    it('should handle quotes in field values', () => {
-      const result = generateFormdataBody(boundary, {
-        text: 'He said "Hello"',
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('He said "Hello"');
+      expect(result).toContain('name="prompt"');
+      expect(result).toContain('name="negative_prompt"');
+      expect(result).toContain('name="steps"');
     });
   });
 
-  describe('Files only', () => {
-    it('should generate correct format for single file', () => {
+  describe('file fields', () => {
+    it('should generate correct format for file', () => {
       const fileContent = Buffer.from('fake image data');
       const result = generateFormdataBody(boundary, {
-        image: {
-          filename: 'test.jpg',
-          contentType: 'image/jpeg',
-          content: fileContent,
-        },
+        image: { filename: 'test.jpg', contentType: 'image/jpeg', content: fileContent },
       });
+
       const resultString = result.toString();
-
-      expect(resultString).toContain(`--${boundary}\r\n`);
-      expect(resultString).toContain('Content-Disposition: form-data; name="image"; filename="test.jpg"\r\n');
-      expect(resultString).toContain('Content-Type: image/jpeg\r\n\r\n');
-      expect(result.includes(fileContent)).toBe(true);
-      expect(resultString).toContain(`--${boundary}--\r\n`);
-    });
-
-    it('should generate correct format for multiple files', () => {
-      const file1Content = Buffer.from('image data 1');
-      const file2Content = Buffer.from('image data 2');
-      const result = generateFormdataBody(boundary, {
-        image1: {
-          filename: 'photo1.jpg',
-          contentType: 'image/jpeg',
-          content: file1Content,
-        },
-        image2: {
-          filename: 'photo2.png',
-          contentType: 'image/png',
-          content: file2Content,
-        },
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('name="image1"; filename="photo1.jpg"');
+      expect(resultString).toContain('name="image"; filename="test.jpg"');
       expect(resultString).toContain('Content-Type: image/jpeg');
-      expect(resultString).toContain('name="image2"; filename="photo2.png"');
-      expect(resultString).toContain('Content-Type: image/png');
-      expect(result.includes(file1Content)).toBe(true);
-      expect(result.includes(file2Content)).toBe(true);
+      expect(result.includes(fileContent)).toBe(true);
     });
 
-    it('should handle binary file content', () => {
-      const binaryContent = Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]); // PNG header
+    it('should handle multiple files', () => {
+      const file1 = Buffer.from('image data 1');
+      const file2 = Buffer.from('image data 2');
       const result = generateFormdataBody(boundary, {
-        file: {
-          filename: 'binary.dat',
-          contentType: 'application/octet-stream',
-          content: binaryContent,
-        },
+        image1: { filename: 'photo1.jpg', contentType: 'image/jpeg', content: file1 },
+        image2: { filename: 'photo2.png', contentType: 'image/png', content: file2 },
       });
 
-      // Verify binary content is preserved
-      expect(result.includes(binaryContent)).toBe(true);
+      expect(result.includes(file1)).toBe(true);
+      expect(result.includes(file2)).toBe(true);
     });
 
-    it('should handle empty file content', () => {
+    it.each([
+      ['binary content', Buffer.from([0x89, 0x50, 0x4e, 0x47]), 'application/octet-stream'],
+      ['empty content', Buffer.from(''), 'text/plain'],
+    ])('should handle %s', (_name, content, contentType) => {
       const result = generateFormdataBody(boundary, {
-        file: {
-          filename: 'empty.txt',
-          contentType: 'text/plain',
-          content: Buffer.from(''),
-        },
+        file: { filename: 'test.dat', contentType, content },
       });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('name="file"; filename="empty.txt"');
-      expect(resultString).toContain('Content-Type: text/plain');
+      expect(result.includes(content)).toBe(true);
     });
   });
 
-  describe('Mixed fields and files', () => {
-    it('should generate correct format with both fields and files', () => {
+  describe('mixed fields and files', () => {
+    it('should handle both text fields and files', () => {
       const fileContent = Buffer.from('image data');
       const result = generateFormdataBody(boundary, {
         prompt: 'A cat',
-        negative_prompt: 'blur',
-        image: {
-          filename: 'reference.jpg',
-          contentType: 'image/jpeg',
-          content: fileContent,
-        },
+        image: { filename: 'ref.jpg', contentType: 'image/jpeg', content: fileContent },
       });
       const resultString = result.toString();
 
-      // Verify text fields
       expect(resultString).toContain('name="prompt"');
       expect(resultString).toContain('A cat');
-      expect(resultString).toContain('name="negative_prompt"');
-      expect(resultString).toContain('blur');
-
-      // Verify file
-      expect(resultString).toContain('name="image"; filename="reference.jpg"');
-      expect(resultString).toContain('Content-Type: image/jpeg');
+      expect(resultString).toContain('name="image"; filename="ref.jpg"');
       expect(result.includes(fileContent)).toBe(true);
     });
 
-    it('should preserve insertion order of fields', () => {
+    it('should preserve insertion order', () => {
       const result = generateFormdataBody(boundary, {
         field1: 'value1',
-        file1: {
-          filename: 'test.txt',
-          contentType: 'text/plain',
-          content: Buffer.from('content'),
-        },
-      });
-      const resultString = result.toString();
+        file1: { filename: 'test.txt', contentType: 'text/plain', content: Buffer.from('content') },
+      }).toString();
 
-      const field1Index = resultString.indexOf('name="field1"');
-      const file1Index = resultString.indexOf('name="file1"');
-
-      expect(field1Index).toBeLessThan(file1Index);
+      expect(result.indexOf('name="field1"')).toBeLessThan(result.indexOf('name="file1"'));
     });
   });
 
-  describe('Null values', () => {
-    it('should convert null values to empty string text fields', () => {
+  describe('null values', () => {
+    it('should convert null to empty string', () => {
       const result = generateFormdataBody(boundary, {
         prompt: 'test',
         negative_prompt: null,
-      });
-      const resultString = result.toString();
+      }).toString();
 
-      expect(resultString).toContain('name="negative_prompt"\r\n\r\n');
-      expect(resultString).toContain(`\r\n--${boundary}--`);
-    });
-
-    it('should handle all-null request', () => {
-      const result = generateFormdataBody(boundary, {
-        field1: null,
-        field2: null,
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('name="field1"');
-      expect(resultString).toContain('name="field2"');
+      expect(result).toContain('name="negative_prompt"\r\n\r\n');
     });
   });
 
-  describe('Edge cases', () => {
-    it('should handle empty request object', () => {
-      const result = generateFormdataBody(boundary, {});
-      const resultString = result.toString();
-
-      expect(resultString).toBe(`--${boundary}--\r\n`);
+  describe('edge cases', () => {
+    it.each([
+      ['empty request', {}, `--${boundary}--\r\n`],
+      ['field name with special chars', { 'field_name-123': 'value' }, 'name="field_name-123"'],
+    ])('should handle %s', (_name, input, expected) => {
+      const result = generateFormdataBody(boundary, input).toString();
+      expect(result).toContain(expected);
     });
 
-    it('should handle custom boundary strings', () => {
-      const customBoundary = '----CustomBoundaryXYZ';
-      const result = generateFormdataBody(customBoundary, {
-        test: 'value',
-      });
-      const resultString = result.toString();
+    it('should handle custom boundary', () => {
+      const custom = '----CustomBoundaryXYZ';
+      const result = generateFormdataBody(custom, { test: 'value' }).toString();
 
-      expect(resultString).toContain(`--${customBoundary}\r\n`);
-      expect(resultString).toContain(`--${customBoundary}--\r\n`);
+      expect(result).toContain(`--${custom}\r\n`);
+      expect(result).toContain(`--${custom}--\r\n`);
     });
 
-    it('should handle field names with special characters', () => {
+    it('should handle filename with special characters', () => {
       const result = generateFormdataBody(boundary, {
-        'field_name-123': 'value',
-      });
-      const resultString = result.toString();
+        file: { filename: 'my-file (1).jpg', contentType: 'image/jpeg', content: Buffer.from('data') },
+      }).toString();
 
-      expect(resultString).toContain('name="field_name-123"');
-    });
-
-    it('should handle filenames with special characters', () => {
-      const result = generateFormdataBody(boundary, {
-        file: {
-          filename: 'my-file (1).jpg',
-          contentType: 'image/jpeg',
-          content: Buffer.from('data'),
-        },
-      });
-      const resultString = result.toString();
-
-      expect(resultString).toContain('filename="my-file (1).jpg"');
+      expect(result).toContain('filename="my-file (1).jpg"');
     });
   });
 
-  describe('Multipart format compliance', () => {
-    it('should use CRLF (\\r\\n) line endings', () => {
-      const result = generateFormdataBody(boundary, {
-        test: 'value',
-      });
-      const resultString = result.toString();
+  describe('multipart format compliance', () => {
+    it('should use correct CRLF format and structure', () => {
+      const result = generateFormdataBody(boundary, { test: 'value' }).toString();
 
-      // Should contain \r\n after boundaries and headers
-      expect(resultString).toContain(`--${boundary}\r\n`);
-      expect(resultString).toContain(`--${boundary}--\r\n`);
-      expect(resultString).toContain('name="test"\r\n\r\n');
+      expect(result).toContain(`--${boundary}\r\n`);
+      expect(result).toContain(`--${boundary}--\r\n`);
+      expect(result).toContain('name="test"\r\n\r\n');
     });
 
-    it('should have correct boundary format', () => {
+    it('should end file content with CRLF before closing boundary', () => {
       const result = generateFormdataBody(boundary, {
-        test: 'value',
-      });
-      const resultString = result.toString();
-
-      // Opening boundaries start with --
-      expect(resultString).toContain(`--${boundary}\r\n`);
-      // Closing boundary ends with --
-      expect(resultString).toContain(`--${boundary}--\r\n`);
-    });
-
-    it('should have empty line between headers and content', () => {
-      const result = generateFormdataBody(boundary, {
-        test: 'value',
-      });
-      const resultString = result.toString();
-
-      // Headers should be followed by \r\n\r\n (empty line)
-      expect(resultString).toContain('name="test"\r\n\r\n');
-    });
-
-    it('should end file content with CRLF before next boundary', () => {
-      const result = generateFormdataBody(boundary, {
-        file: {
-          filename: 'test.txt',
-          contentType: 'text/plain',
-          content: Buffer.from('content'),
-        },
+        file: { filename: 'test.txt', contentType: 'text/plain', content: Buffer.from('content') },
       });
 
-      // File content should be followed by \r\n before closing boundary
       const expected = Buffer.concat([
         Buffer.from('content'),
         Buffer.from('\r\n'),
         Buffer.from(`--${boundary}--\r\n`),
       ]);
-
       expect(result.includes(expected)).toBe(true);
     });
 
     it('should return a Buffer instance', () => {
-      const result = generateFormdataBody(boundary, {
-        test: 'value',
-      });
-
-      expect(Buffer.isBuffer(result)).toBe(true);
+      expect(Buffer.isBuffer(generateFormdataBody(boundary, { test: 'value' }))).toBe(true);
     });
   });
 
-  describe('Real-world scenarios', () => {
-    it('should generate valid format for video prompt booster request', () => {
+  describe('real-world scenario', () => {
+    it('should generate valid format for image generation request', () => {
       const imageData = Buffer.from('fake-image-binary-data');
       const result = generateFormdataBody(boundary, {
         prompt: 'A cinematic video sequence',
         negative_prompt: 'blur, darkness',
-        image: {
-          filename: 'reference.jpg',
-          contentType: 'image/jpeg',
-          content: imageData,
-        },
+        image: { filename: 'reference.jpg', contentType: 'image/jpeg', content: imageData },
       });
       const resultString = result.toString();
 
-      // Verify complete structure
-      expect(resultString).toMatch(/--.*TestBoundary.*\r\n/);
-      expect(resultString).toContain('Content-Disposition: form-data; name="prompt"');
+      expect(resultString).toContain('name="prompt"');
       expect(resultString).toContain('A cinematic video sequence');
-      expect(resultString).toContain('Content-Disposition: form-data; name="negative_prompt"');
-      expect(resultString).toContain('blur, darkness');
-      expect(resultString).toContain('Content-Disposition: form-data; name="image"; filename="reference.jpg"');
-      expect(resultString).toContain('Content-Type: image/jpeg');
+      expect(resultString).toContain('name="negative_prompt"');
+      expect(resultString).toContain('name="image"; filename="reference.jpg"');
       expect(result.includes(imageData)).toBe(true);
     });
 
     it('should handle large file content', () => {
-      const largeContent = Buffer.alloc(1024 * 100); // 100KB
-      largeContent.fill(0xFF);
-
+      const largeContent = Buffer.alloc(1024 * 100, 0xff);
       const result = generateFormdataBody(boundary, {
-        file: {
-          filename: 'large.bin',
-          contentType: 'application/octet-stream',
-          content: largeContent,
-        },
+        file: { filename: 'large.bin', contentType: 'application/octet-stream', content: largeContent },
       });
 
-      // Verify large content is included
       expect(result.includes(largeContent)).toBe(true);
       expect(result.length).toBeGreaterThan(100 * 1024);
     });

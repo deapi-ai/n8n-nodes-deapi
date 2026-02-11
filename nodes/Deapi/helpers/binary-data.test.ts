@@ -1,20 +1,23 @@
-import { IBinaryData, IExecuteFunctions, IWebhookFunctions } from 'n8n-workflow';
+import type { IBinaryData, IExecuteFunctions, IWebhookFunctions } from 'n8n-workflow';
+import type { Readable } from 'stream';
+import { mockDeep } from 'jest-mock-extended';
 import { getBinaryDataFile, downloadAndPrepareBinaryData } from './binary-data';
 
 describe('getBinaryDataFile', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('In-memory binary data (no id)', () => {
     it('should retrieve binary data stored in memory', async () => {
       const fileBuffer = Buffer.from('test file content');
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'test.txt',
-            mimeType: 'text/plain',
-            id: undefined, // In-memory storage
-          }),
-          getBinaryDataBuffer: jest.fn().mockResolvedValue(fileBuffer),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'test.txt',
+        mimeType: 'text/plain',
+        id: undefined,
+      } as IBinaryData);
+      mockContext.helpers.getBinaryDataBuffer.mockResolvedValue(fileBuffer);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -29,16 +32,13 @@ describe('getBinaryDataFile', () => {
 
     it('should handle binary data with special characters in filename', async () => {
       const fileBuffer = Buffer.from('content');
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'my-file (1).jpg',
-            mimeType: 'image/jpeg',
-            id: undefined,
-          }),
-          getBinaryDataBuffer: jest.fn().mockResolvedValue(fileBuffer),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'my-file (1).jpg',
+        mimeType: 'image/jpeg',
+        id: undefined,
+      } as IBinaryData);
+      mockContext.helpers.getBinaryDataBuffer.mockResolvedValue(fileBuffer);
 
       const result = await getBinaryDataFile(mockContext, 0, 'image');
 
@@ -48,16 +48,13 @@ describe('getBinaryDataFile', () => {
 
     it('should handle empty buffer', async () => {
       const emptyBuffer = Buffer.from('');
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'empty.txt',
-            mimeType: 'text/plain',
-            id: undefined,
-          }),
-          getBinaryDataBuffer: jest.fn().mockResolvedValue(emptyBuffer),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'empty.txt',
+        mimeType: 'text/plain',
+        id: undefined,
+      } as IBinaryData);
+      mockContext.helpers.getBinaryDataBuffer.mockResolvedValue(emptyBuffer);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -78,16 +75,13 @@ describe('getBinaryDataFile', () => {
         yield chunk3;
       }
 
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'large-file.bin',
-            mimeType: 'application/octet-stream',
-            id: 'external-file-id-123',
-          }),
-          getBinaryStream: jest.fn().mockResolvedValue(mockStream()),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'large-file.bin',
+        mimeType: 'application/octet-stream',
+        id: 'external-file-id-123',
+      } as IBinaryData);
+      mockContext.helpers.getBinaryStream.mockResolvedValue(mockStream() as unknown as Readable);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -108,16 +102,13 @@ describe('getBinaryDataFile', () => {
         yield singleChunk;
       }
 
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'file.txt',
-            mimeType: 'text/plain',
-            id: 'file-id',
-          }),
-          getBinaryStream: jest.fn().mockResolvedValue(mockStream()),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'file.txt',
+        mimeType: 'text/plain',
+        id: 'file-id',
+      } as IBinaryData);
+      mockContext.helpers.getBinaryStream.mockResolvedValue(mockStream() as unknown as Readable);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -131,16 +122,13 @@ describe('getBinaryDataFile', () => {
         yield binaryChunk;
       }
 
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'image.png',
-            mimeType: 'image/png',
-            id: 'file-id',
-          }),
-          getBinaryStream: jest.fn().mockResolvedValue(mockStream()),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'image.png',
+        mimeType: 'image/png',
+        id: 'file-id',
+      } as IBinaryData);
+      mockContext.helpers.getBinaryStream.mockResolvedValue(mockStream() as unknown as Readable);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -149,22 +137,18 @@ describe('getBinaryDataFile', () => {
     });
 
     it('should convert non-Buffer chunks to Buffer', async () => {
-      // Simulate chunks that might come as Uint8Array or other formats
       async function* mockStream() {
         yield new Uint8Array([65, 66, 67]); // "ABC"
         yield Buffer.from('DEF');
       }
 
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'mixed.txt',
-            mimeType: 'text/plain',
-            id: 'file-id',
-          }),
-          getBinaryStream: jest.fn().mockResolvedValue(mockStream()),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'mixed.txt',
+        mimeType: 'text/plain',
+        id: 'file-id',
+      } as IBinaryData);
+      mockContext.helpers.getBinaryStream.mockResolvedValue(mockStream() as unknown as Readable);
 
       const result = await getBinaryDataFile(mockContext, 0, 'data');
 
@@ -176,16 +160,13 @@ describe('getBinaryDataFile', () => {
   describe('Different item indices', () => {
     it('should work with different item indices', async () => {
       const fileBuffer = Buffer.from('content');
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'file.txt',
-            mimeType: 'text/plain',
-            id: undefined,
-          }),
-          getBinaryDataBuffer: jest.fn().mockResolvedValue(fileBuffer),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'file.txt',
+        mimeType: 'text/plain',
+        id: undefined,
+      } as IBinaryData);
+      mockContext.helpers.getBinaryDataBuffer.mockResolvedValue(fileBuffer);
 
       await getBinaryDataFile(mockContext, 5, 'data');
 
@@ -197,16 +178,13 @@ describe('getBinaryDataFile', () => {
   describe('Different property names', () => {
     it('should work with custom binary property names', async () => {
       const fileBuffer = Buffer.from('content');
-      const mockContext = {
-        helpers: {
-          assertBinaryData: jest.fn().mockReturnValue({
-            fileName: 'file.txt',
-            mimeType: 'text/plain',
-            id: undefined,
-          }),
-          getBinaryDataBuffer: jest.fn().mockResolvedValue(fileBuffer),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.assertBinaryData.mockReturnValue({
+        fileName: 'file.txt',
+        mimeType: 'text/plain',
+        id: undefined,
+      } as IBinaryData);
+      mockContext.helpers.getBinaryDataBuffer.mockResolvedValue(fileBuffer);
 
       await getBinaryDataFile(mockContext, 0, 'customProperty');
 
@@ -217,6 +195,10 @@ describe('getBinaryDataFile', () => {
 });
 
 describe('downloadAndPrepareBinaryData', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('Successful downloads', () => {
     it('should download and prepare binary data from URL', async () => {
       const fileBuffer = Buffer.from('downloaded content');
@@ -226,17 +208,14 @@ describe('downloadAndPrepareBinaryData', () => {
         fileName: 'image.jpg',
       } as IBinaryData;
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: fileBuffer,
-            headers: {
-              'content-type': 'image/jpeg',
-            },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue(preparedBinaryData),
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: fileBuffer,
+        headers: {
+          'content-type': 'image/jpeg',
         },
-      } as unknown as IExecuteFunctions;
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue(preparedBinaryData);
 
       const result = await downloadAndPrepareBinaryData(
         mockContext,
@@ -265,17 +244,14 @@ describe('downloadAndPrepareBinaryData', () => {
         fileName: 'file.png',
       } as IBinaryData;
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: fileBuffer,
-            headers: {
-              'content-type': 'image/png',
-            },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue(preparedBinaryData),
+      const mockContext = mockDeep<IWebhookFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: fileBuffer,
+        headers: {
+          'content-type': 'image/png',
         },
-      } as unknown as IWebhookFunctions;
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue(preparedBinaryData);
 
       const result = await downloadAndPrepareBinaryData(mockContext, 'https://example.com/file.png');
 
@@ -285,15 +261,12 @@ describe('downloadAndPrepareBinaryData', () => {
 
   describe('Filename extraction', () => {
     it('should extract filename from simple URL', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'image/png' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'image/png' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/photo.png');
 
@@ -305,15 +278,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should extract filename from URL with nested path', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'image/jpeg' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'image/jpeg' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(
         mockContext,
@@ -328,15 +298,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should use "output" as fallback filename when URL has no filename', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'application/octet-stream' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'application/octet-stream' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/');
 
@@ -348,15 +315,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should handle URL with query parameters', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'image/png' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'image/png' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(
         mockContext,
@@ -371,15 +335,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should handle filename with URL-encoded characters', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'image/jpeg' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'image/jpeg' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(
         mockContext,
@@ -396,15 +357,12 @@ describe('downloadAndPrepareBinaryData', () => {
 
   describe('MIME type handling', () => {
     it('should extract mime type from content-type header', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'video/mp4' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'video/mp4' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/video.mp4');
 
@@ -416,15 +374,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should handle content-type with charset', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: { 'content-type': 'text/html; charset=utf-8' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: { 'content-type': 'text/html; charset=utf-8' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/page.html');
 
@@ -436,15 +391,12 @@ describe('downloadAndPrepareBinaryData', () => {
     });
 
     it('should handle undefined content-type', async () => {
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: Buffer.from('content'),
-            headers: {},
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: Buffer.from('content'),
+        headers: {},
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/file.bin');
 
@@ -461,15 +413,12 @@ describe('downloadAndPrepareBinaryData', () => {
       const largeBuffer = Buffer.alloc(1024 * 1024); // 1MB
       largeBuffer.fill(0xFF);
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: largeBuffer,
-            headers: { 'content-type': 'application/octet-stream' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: largeBuffer,
+        headers: { 'content-type': 'application/octet-stream' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/large.bin');
 
@@ -483,19 +432,16 @@ describe('downloadAndPrepareBinaryData', () => {
     it('should preserve binary data integrity', async () => {
       const binaryData = Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]); // PNG header
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: binaryData,
-            headers: { 'content-type': 'image/png' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: binaryData,
+        headers: { 'content-type': 'image/png' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/image.png');
 
-      const passedBuffer = (mockContext.helpers.prepareBinaryData as jest.Mock).mock.calls[0][0];
+      const passedBuffer = mockContext.helpers.prepareBinaryData.mock.calls[0][0] as Buffer;
       expect(passedBuffer).toEqual(binaryData);
       expect(passedBuffer[0]).toBe(0x89);
     });
@@ -503,15 +449,12 @@ describe('downloadAndPrepareBinaryData', () => {
     it('should handle empty response', async () => {
       const emptyBuffer = Buffer.from('');
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: emptyBuffer,
-            headers: { 'content-type': 'text/plain' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue({} as IBinaryData),
-        },
-      } as unknown as IExecuteFunctions;
+      const mockContext = mockDeep<IExecuteFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: emptyBuffer,
+        headers: { 'content-type': 'text/plain' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue({} as IBinaryData);
 
       await downloadAndPrepareBinaryData(mockContext, 'https://example.com/empty.txt');
 
@@ -532,15 +475,12 @@ describe('downloadAndPrepareBinaryData', () => {
         fileName: 'generated_123.png',
       } as IBinaryData;
 
-      const mockContext = {
-        helpers: {
-          httpRequest: jest.fn().mockResolvedValue({
-            body: imageBuffer,
-            headers: { 'content-type': 'image/png' },
-          }),
-          prepareBinaryData: jest.fn().mockResolvedValue(preparedData),
-        },
-      } as unknown as IWebhookFunctions;
+      const mockContext = mockDeep<IWebhookFunctions>();
+      mockContext.helpers.httpRequest.mockResolvedValue({
+        body: imageBuffer,
+        headers: { 'content-type': 'image/png' },
+      });
+      mockContext.helpers.prepareBinaryData.mockResolvedValue(preparedData);
 
       const result = await downloadAndPrepareBinaryData(
         mockContext,
