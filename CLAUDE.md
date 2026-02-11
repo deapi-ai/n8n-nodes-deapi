@@ -36,10 +36,9 @@ This package implements two node types:
    - Supports multiple resources: image, video, audio, prompt
    - Uses a router pattern to delegate to resource-specific operations
 
-2. **DeapiTrigger Node** (`nodes/DeapiTrigger/DeapiTrigger.node.ts`) - Webhook trigger node
+2. **DeapiTrigger Node** (`nodes/Deapi/DeapiTrigger.node.ts`) - Webhook trigger node
    - Listens for deAPI job status webhooks (processing, completed, failed)
    - Requires HTTPS webhook URLs
-   - Uses a local proxy server (localhost:3000) for webhook registration
 
 ### Resource/Operation Pattern
 
@@ -75,7 +74,7 @@ One credential type in `credentials/`:
 
 `nodes/Deapi/helpers/interfaces.ts` contains TypeScript interfaces for:
 - API request payloads (e.g., `TextToImageRequest`)
-- API responses (e.g., `GenerationResponse`, `BoosterResponse`)
+- API responses (e.g., `BoosterResponse`)
 
 ## Adding New Operations
 
@@ -191,17 +190,12 @@ This ensures the workflow only proceeds when the generation is actually complete
 
 ### Timeout Handling
 
-- Default: Wait indefinitely (using `WAIT_INDEFINITELY` constant from n8n-workflow)
-- `WAIT_INDEFINITELY = new Date('3000-01-01T00:00:00.000Z')`
-- Configurable via `waitTimeout` option (0 = indefinite, >0 = minutes)
+- Configurable via `waitTimeout` option
 - If timeout is reached before webhook is called, execution auto-resumes with initial state
-- When `waitTimeout` is 0 or unset, uses `WAIT_INDEFINITELY` constant
-- When `waitTimeout` is specified (1-1440 minutes), calculates exact timeout date
 
 ## Important Notes
 
-- The `package.json` n8n.nodes array currently references a non-existent Example node - this needs to be updated to reference the actual Deapi and DeapiTrigger nodes when ready for publishing
-- The DeapiTrigger node has hardcoded `localhost:3000` for webhook proxy - this should be configurable via credentials
-- Webhook signature verification is commented out in DeapiTrigger - implement before production use
+- After every build, run the linter to catch any issues
+- Do not use external dependencies in any operation's implementation to satisfy the requirements of the linter
 - Resolution options vary by model and are conditionally displayed using `displayOptions`
-- The image generation operation always waits for completion via webhook - there is no option to skip waiting and get just the request_id
+- Every generation operation always waits for completion via webhook - there is no option to skip waiting and get just the request_id
