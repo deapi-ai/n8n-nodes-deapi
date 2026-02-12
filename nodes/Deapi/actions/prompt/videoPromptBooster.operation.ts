@@ -84,14 +84,13 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   const boundary = `----n8nFormBoundary${Date.now()}`;
   const body = generateFormdataBody(boundary, request);
 
-  // Send request with streamed multipart body using apiRequest
   const response = await apiRequest.call(this, 'POST', '/prompt/video', {
     headers: {
       'Content-Type': `multipart/form-data; boundary=${boundary}`,
     },
     option: {
-      body,  // Pass body through option to support Readable type
-      json: false,  // Disable JSON mode for multipart/form-data
+      body,
+      json: false,
     },
   }) as BoosterResponse;
 

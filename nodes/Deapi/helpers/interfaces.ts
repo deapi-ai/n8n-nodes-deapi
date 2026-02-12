@@ -12,8 +12,6 @@ export interface TextToImageRequest extends IDataObject {
   webhook_url: string,
 }
 
-// `steps`, `guidance`, and `fps` as unit types, because right now we support
-// only Ltx model that accepts only these values.
 export interface TextToVideoRequest extends IDataObject {
   prompt: string,
   model: string,
@@ -22,9 +20,9 @@ export interface TextToVideoRequest extends IDataObject {
   height: number,
   negative_prompt?: string,
   seed: number,
-  steps: 1,
-  guidance: 0.0,
-  fps: 30,
+  steps: number,
+  guidance: number,
+  fps: number,
   webhook_url: string,
 }
 
@@ -53,8 +51,6 @@ export type VideoPromptBoosterRequest = {
   image: FormdataFileValue | null;
 };
 
-// `steps`, `guidance`, and `fps` as unit types, because right now we support
-// only Ltx model that accepts only these values.
 // TO ANSWER how `width` and `height` behave with `first_frame_image` provided ?
 export type ImageToVideoRequest = {
   prompt: string;
@@ -66,9 +62,9 @@ export type ImageToVideoRequest = {
   last_frame_image: FormdataFileValue | null;
   negative_prompt: string | null;
   seed: number;
-  steps: 1;
-  guidance: 0.0;
-  fps: 30;
+  steps: number;
+  guidance: number;
+  fps: number;
   webhook_url: string;
 };
 
@@ -85,6 +81,6 @@ export type AudioFileToTextRequest = {
   audio: FormdataFileValue;
   include_ts: boolean;
   model: string;
-  // return_result_in_response?: boolean;
+  // return_result_in_response: boolean | null;
   webhook_url: string;
 };

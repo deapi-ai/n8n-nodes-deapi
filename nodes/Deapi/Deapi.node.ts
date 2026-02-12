@@ -49,8 +49,6 @@ export class Deapi implements INodeType {
 			},
 		],
 		properties: [
-			// Node properties which the user gets displayed and
-			// can change on the node.
       {
         displayName: 'Resource',
         name: 'resource',
