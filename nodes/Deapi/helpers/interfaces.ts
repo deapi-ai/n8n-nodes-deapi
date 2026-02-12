@@ -84,3 +84,9 @@ export type AudioFileToTextRequest = {
   // return_result_in_response: boolean | null;
   webhook_url: string;
 };
+
+export type RemoveBackgroundRequest = {
+  image: FormdataFileValue;
+  model: string;
+  webhook_url: string;
+};

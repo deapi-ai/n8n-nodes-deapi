@@ -1,8 +1,9 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 import * as generate from './generate.operation';
+import * as removeBackground from './removeBackground.operation';
 
-export { generate };
+export { generate, removeBackground };
 
 export const description: INodeProperties[] = [
   {
@@ -22,6 +23,12 @@ export const description: INodeProperties[] = [
         value: 'edit',
         action: 'Edit image',
         description: 'Generates a new image from an image'
+      },
+      {
+        name: 'Remove Background',
+        value: 'removeBackground',
+        action: 'Remove background',
+        description: 'Remove the background from an image'
       }
     ],
     default: 'generate',
@@ -32,4 +39,5 @@ export const description: INodeProperties[] = [
     },
   },
   ...generate.description,
+  ...removeBackground.description,
 ];

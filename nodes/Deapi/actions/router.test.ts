@@ -10,6 +10,7 @@ import { router } from './router';
 describe('Deapi router', () => {
 	const mockExecuteFunctions = mockDeep<IExecuteFunctions>();
 	const mockImageGenerate = jest.spyOn(image.generate, 'execute');
+	const mockImageRemoveBackground = jest.spyOn(image.removeBackground, 'execute');
 	const mockVideoGenerate = jest.spyOn(video.generate, 'execute');
 	const mockVideoTranscribe = jest.spyOn(video.transcribe, 'execute');
 	const mockAudioTranscribe = jest.spyOn(audio.transcribe, 'execute');
@@ -18,6 +19,7 @@ describe('Deapi router', () => {
 
 	const operationMocks = [
 		[mockImageGenerate, 'image', 'generate'],
+		[mockImageRemoveBackground, 'image', 'removeBackground'],
 		[mockVideoGenerate, 'video', 'generate'],
 		[mockVideoTranscribe, 'video', 'transcribe'],
 		[mockAudioTranscribe, 'audio', 'transcribe'],
