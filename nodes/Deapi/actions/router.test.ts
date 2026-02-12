@@ -3,6 +3,7 @@ import type { IExecuteFunctions } from 'n8n-workflow';
 
 import * as image from './image';
 import * as video from './video';
+import * as audio from './audio';
 import * as prompt from './prompt';
 import { router } from './router';
 
@@ -12,6 +13,7 @@ describe('Deapi router', () => {
 	const mockVideoGenerateFromText = jest.spyOn(video.generateFromText, 'execute');
 	const mockVideoGenerateFromImage = jest.spyOn(video.generateFromImage, 'execute');
 	const mockVideoTranscribe = jest.spyOn(video.transcribe, 'execute');
+	const mockAudioTranscribe = jest.spyOn(audio.transcribe, 'execute');
 	const mockPromptBoostImage = jest.spyOn(prompt.boostImage, 'execute');
 	const mockPromptBoostVideo = jest.spyOn(prompt.boostVideo, 'execute');
 
@@ -20,6 +22,7 @@ describe('Deapi router', () => {
 		[mockVideoGenerateFromText, 'video', 'generateFromText'],
 		[mockVideoGenerateFromImage, 'video', 'generateFromImage'],
 		[mockVideoTranscribe, 'video', 'transcribe'],
+		[mockAudioTranscribe, 'audio', 'transcribe'],
 		[mockPromptBoostImage, 'prompt', 'boostImage'],
 		[mockPromptBoostVideo, 'prompt', 'boostVideo'],
 	];

@@ -80,3 +80,11 @@ export type VideoFileToTextRequest = {
   return_result_in_response?: boolean,
   webhook_url: string;
 };
+
+export type AudioFileToTextRequest = {
+  audio: FormdataFileValue;
+  include_ts: boolean;
+  model: string;
+  // return_result_in_response?: boolean;
+  webhook_url: string;
+};

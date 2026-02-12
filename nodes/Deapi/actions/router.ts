@@ -7,6 +7,7 @@ import {
 import type { DeApiType } from './node.type';
 import * as image from './image';
 import * as video from './video';
+import * as audio from './audio';
 import * as prompt from './prompt';
 
 export async function router(this: IExecuteFunctions) {
@@ -28,6 +29,9 @@ export async function router(this: IExecuteFunctions) {
       break;
     case 'video':
       execute = video[deApiTypeData.operation].execute;
+      break;
+    case 'audio':
+      execute = audio[deApiTypeData.operation].execute;
       break;
     case 'prompt':
       execute = prompt[deApiTypeData.operation].execute;

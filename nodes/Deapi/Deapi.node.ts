@@ -11,6 +11,7 @@ import { NodeConnectionTypes } from 'n8n-workflow';
 
 import * as image from './actions/image';
 import * as video from './actions/video';
+import * as audio from './actions/audio';
 import * as prompt from './actions/prompt';
 import { router } from './actions/router';
 import { verifyWebhookSignature } from './helpers/webhook-verification';
@@ -77,6 +78,7 @@ export class Deapi implements INodeType {
       },
       ...image.description,
       ...video.description,
+      ...audio.description,
       ...prompt.description,
 		],
 	};
