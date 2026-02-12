@@ -20,12 +20,6 @@ export const description: INodeProperties[] = [
         description: 'Generates an image from a text prompt'
       },
       {
-        name: 'Edit Image',
-        value: 'edit',
-        action: 'Edit image',
-        description: 'Generates a new image from an image'
-      },
-      {
         name: 'Remove Background',
         value: 'removeBackground',
         action: 'Remove background',
