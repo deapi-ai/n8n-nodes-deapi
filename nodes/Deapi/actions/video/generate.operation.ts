@@ -6,6 +6,7 @@ import {
 } from "n8n-workflow";
 
 import type {
+  TextToVideoRequest,
   ImageToVideoRequest,
 } from '../../helpers/interfaces';
 import { apiRequest } from "../../transport";
@@ -13,6 +14,26 @@ import { getBinaryDataFile } from "../../helpers/binary-data";
 import { generateFormdataBody } from "../../helpers/formdata";
 
 const properties: INodeProperties[] = [
+  {
+    displayName: 'Source',
+    name: 'source',
+    type: 'options',
+    required: true,
+    description: 'Generate video from text prompt only or from image(s)',
+    options: [
+      {
+        name: 'Text Prompt',
+        value: 'text',
+        description: 'Generate a video from a text description only',
+      },
+      {
+        name: 'Image(s)',
+        value: 'image',
+        description: 'Generate a video using first frame image (and optionally last frame)',
+      },
+    ],
+    default: 'text',
+  },
   {
     displayName: 'Prompt',
     name: 'prompt',
@@ -33,6 +54,11 @@ const properties: INodeProperties[] = [
     required: true,
     placeholder: 'e.g. data',
     description: 'The name of the binary field containing the first frame',
+    displayOptions: {
+      show: {
+        source: ['image'],
+      },
+    },
   },
   {
     displayName: 'Model',
@@ -85,6 +111,11 @@ const properties: INodeProperties[] = [
         default: 'data1',
         placeholder: 'e.g. data',
         description: 'The name of the binary field containing the last frame',
+        displayOptions: {
+          show: {
+            '/source': ['image'],
+          },
+        },
       },
       {
         displayName: 'Frames',
@@ -226,7 +257,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
   show: {
-    operation: ['generateFromImage'],
+    operation: ['generate'],
     resource: ['video'],
   },
 };
@@ -234,20 +265,14 @@ const displayOptions = {
 export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
-  // Combine these types for switch statements, to conclude default values when options aren't provided.
   type Model = 'Ltxv_13B_0_9_8_Distilled_FP8';
   type Ratio = 'square' | 'landscape' | 'portrait';
 
+  const source = this.getNodeParameter('source', i) as 'text' | 'image';
   const prompt = this.getNodeParameter('prompt', i) as string;
-  const firstFrame = this.getNodeParameter('firstFrame', i) as string;
   const model = this.getNodeParameter('model', i) as Model;
   const ratio = this.getNodeParameter('ratio', i) as Ratio;
   const options = this.getNodeParameter('options', i);
-
-  // Binary Field Name For The First Frame
-  const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, firstFrame);
-  const ff: ImageToVideoRequest['first_frame_image'] =
-    { filename: filename || 'file', contentType, content: fileContent };
 
   // Frames
   const frames = options.frames as (number | undefined);
@@ -280,14 +305,6 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
     [width, height] = size.split('x').map(Number);
   }
 
-  // Binary Field Name For The Last Frame
-  const lastFrame = options.lastFrame as (string | undefined);
-  let lf: ImageToVideoRequest['last_frame_image'] = null;
-  if (lastFrame) {
-      const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, lastFrame);
-      lf = { filename: filename || 'file', contentType, content: fileContent };
-  }
-
   // Negative Prompt
   const negativePrompt = options.negativePrompt as (string | undefined);
 
@@ -309,36 +326,68 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   // NOW get the webhook resume URL (after the webhook is registered)
   const webhookUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
 
-  // Build the request body with webhook URL
-  const request: ImageToVideoRequest = {
-    prompt: prompt,
-    model: model,
-    first_frame_image: ff,
-    frames: frames ?? 120,
-    width: width,
-    height: height,
-    last_frame_image: lf,
-    negative_prompt: negativePrompt ?? null,
-    seed: seed,
-    steps: 1,
-    guidance: 0.0,
-    fps: 30,
-    webhook_url: webhookUrl,
-  };
+  if (source === 'text') {
+    // Text-to-video: use JSON body
+    const body: TextToVideoRequest = {
+      prompt: prompt,
+      model: model,
+      frames: frames ?? 120,
+      width: width,
+      height: height,
+      negative_prompt: negativePrompt,
+      seed: seed,
+      steps: 1,
+      guidance: 0.0,
+      fps: 30,
+      webhook_url: webhookUrl,
+    };
 
-  const boundary = `----n8nFormBoundary${Date.now()}`;
-  const body = generateFormdataBody(boundary, request);
+    await apiRequest.call(this, 'POST', '/txt2video', { body });
+  } else {
+    // Image-to-video: use multipart form-data
+    const firstFrame = this.getNodeParameter('firstFrame', i) as string;
 
-  // Send request with streamed multipart body using apiRequest
-  await apiRequest.call(this, 'POST', '/img2video', {
-    headers: {
-      'Content-Type': `multipart/form-data; boundary=${boundary}`,
-    },
-    option: {
-      body,  // Pass body through option to support Readable type
-      json: false,  // Disable JSON mode for multipart/form-data
-    },
-  });
+    const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, firstFrame);
+    const ff: ImageToVideoRequest['first_frame_image'] =
+      { filename: filename || 'file', contentType, content: fileContent };
+
+    // Last frame (optional)
+    const lastFrame = options.lastFrame as (string | undefined);
+    let lf: ImageToVideoRequest['last_frame_image'] = null;
+    if (lastFrame) {
+      const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, lastFrame);
+      lf = { filename: filename || 'file', contentType, content: fileContent };
+    }
+
+    const request: ImageToVideoRequest = {
+      prompt: prompt,
+      model: model,
+      first_frame_image: ff,
+      frames: frames ?? 120,
+      width: width,
+      height: height,
+      last_frame_image: lf,
+      negative_prompt: negativePrompt ?? null,
+      seed: seed,
+      steps: 1,
+      guidance: 0.0,
+      fps: 30,
+      webhook_url: webhookUrl,
+    };
+
+    const boundary = `----n8nFormBoundary${Date.now()}`;
+    const body = generateFormdataBody(boundary, request);
+
+    await apiRequest.call(this, 'POST', '/img2video', {
+      headers: {
+        'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      },
+      option: {
+        body,
+        json: false,
+      },
+    });
+  }
 
   // Return the current input data
   // When the webhook is called, the webhook() method will provide the actual output

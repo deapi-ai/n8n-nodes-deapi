@@ -1,10 +1,9 @@
 import type { INodeProperties } from 'n8n-workflow';
 
-import * as generateFromText from './generate-from-text.operation';
-import * as generateFromImage from './generate-from-image.operation';
+import * as generate from './generate.operation';
 import * as transcribe from './transcribe.operation';
 
-export { generateFromText, generateFromImage, transcribe };
+export { generate, transcribe };
 
 export const description: INodeProperties[] = [
   {
@@ -14,16 +13,10 @@ export const description: INodeProperties[] = [
     noDataExpression: true,
     options: [
       {
-        name: 'Generate a Video From Text',
-        value: 'generateFromText',
-        action: 'Generate a video from text',
-        description: 'Generates a video from a text prompt'
-      },
-      {
-        name: 'Generate a Video From Image',
-        value: 'generateFromImage',
-        action: 'Generate a video from image',
-        description: 'Generates a video from an image'
+        name: 'Generate a Video',
+        value: 'generate',
+        action: 'Generate a video',
+        description: 'Generates a video from text prompt or image(s)'
       },
       {
         name: 'Transcribe a Video',
@@ -32,14 +25,13 @@ export const description: INodeProperties[] = [
         description: 'Transcribes audio from a video to text'
       },
     ],
-    default: 'generateFromText',
+    default: 'generate',
     displayOptions: {
       show: {
         resource: ['video'],
       },
     },
   },
-  ...generateFromText.description,
-  ...generateFromImage.description,
+  ...generate.description,
   ...transcribe.description,
 ];
