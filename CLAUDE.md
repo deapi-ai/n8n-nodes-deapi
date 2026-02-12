@@ -16,8 +16,7 @@ This is an n8n community node package for integrating deAPI (AI model generation
 - `npm run dev` - Start n8n-node development mode
 
 ### Linting
-- `npm run lint` - Run ESLint checks
-- `npm run lint:fix` - Fix linting issues automatically
+- `npx eslint nodes/ credentials/` - Run ESLint checks
 
 ### Testing
 - `npm test` - Run Jest tests
