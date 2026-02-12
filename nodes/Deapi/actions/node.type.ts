@@ -1,7 +1,7 @@
 import { AllEntities } from "n8n-workflow";
 
 type NodeMap = {
-  image: 'generate' | 'removeBackground';
+  image: 'generate' | 'removeBackground' | 'upscale';
   video: 'generate' | 'transcribe';
   audio: 'transcribe';
   prompt: 'boostImage' | 'boostVideo';

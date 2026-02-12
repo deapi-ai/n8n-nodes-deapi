@@ -90,3 +90,9 @@ export type RemoveBackgroundRequest = {
   model: string;
   webhook_url: string;
 };
+
+export type UpscaleRequest = {
+  image: FormdataFileValue;
+  model: string;
+  webhook_url: string;
+};
