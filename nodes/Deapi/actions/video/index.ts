@@ -2,8 +2,9 @@ import type { INodeProperties } from 'n8n-workflow';
 
 import * as generateFromText from './generate-from-text.operation';
 import * as generateFromImage from './generate-from-image.operation';
+import * as transcribe from './transcribe.operation';
 
-export { generateFromText, generateFromImage };
+export { generateFromText, generateFromImage, transcribe };
 
 export const description: INodeProperties[] = [
   {
@@ -24,6 +25,12 @@ export const description: INodeProperties[] = [
         action: 'Generate a video from image',
         description: 'Generates a video from an image'
       },
+      {
+        name: 'Transcribe a Video',
+        value: 'transcribe',
+        action: 'Transcribe a video',
+        description: 'Transcribes audio from a video to text'
+      },
     ],
     default: 'generateFromText',
     displayOptions: {
@@ -34,4 +41,5 @@ export const description: INodeProperties[] = [
   },
   ...generateFromText.description,
   ...generateFromImage.description,
+  ...transcribe.description,
 ];

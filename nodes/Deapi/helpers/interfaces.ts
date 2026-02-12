@@ -28,6 +28,14 @@ export interface TextToVideoRequest extends IDataObject {
   webhook_url: string,
 }
 
+export interface VideoToTextRequest extends IDataObject {
+  video_url: string;
+  include_ts: boolean;
+  model: string;
+  // return_result_in_response?: boolean;
+  webhook_url: string;
+}
+
 export interface ImagePromptBoosterRequest extends IDataObject {
   prompt: string,
   negative_prompt: string | null,
@@ -61,5 +69,14 @@ export type ImageToVideoRequest = {
   steps: 1;
   guidance: 0.0;
   fps: 30;
+  webhook_url: string;
+};
+
+export type VideoFileToTextRequest = {
+  video: FormdataFileValue;
+  include_ts: boolean;
+  model: string;
+  // return_result_in_response: boolean | null;
+  return_result_in_response?: boolean,
   webhook_url: string;
 };

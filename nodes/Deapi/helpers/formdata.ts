@@ -4,11 +4,11 @@ export interface FormdataFileValue {
   content: Buffer;
 }
 
-type FormdataValue = string | number | FormdataFileValue | null;
+type FormdataValue = string | number | boolean | FormdataFileValue | null;
 
 /**
  * Generates a multipart/form-data body as a Buffer from a typed request object.
- * String and number values become text fields, FormdataFileValue objects become file fields,
+ * String, number, and boolean values become text fields, FormdataFileValue objects become file fields,
  * null values become empty string text fields.
  *
  * @param boundary - The boundary string to use for multipart/form-data
@@ -32,7 +32,7 @@ export function generateFormdataBody(
       parts.push(value.content);
       parts.push(Buffer.from('\r\n'));
     } else {
-      // Text field (string, number, null)
+      // Text field (string, number, boolean, null)
       parts.push(Buffer.from(
         `--${boundary}\r\n` +
         `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
