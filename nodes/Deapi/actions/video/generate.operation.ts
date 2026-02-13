@@ -65,12 +65,16 @@ const properties: INodeProperties[] = [
     name: 'model',
     type: 'options',
     description: 'The model to use for video generation',
-    default: 'Ltxv_13B_0_9_8_Distilled_FP8',
+    default: 'Ltx2_19B_Dist_FP8',
     required: true,
     options: [
       {
         name: 'LTX-Video-0.9.8 13B',
         value: 'Ltxv_13B_0_9_8_Distilled_FP8'
+      },
+      {
+        name: 'LTX-2 19B Distilled FP8',
+        value: 'Ltx2_19B_Dist_FP8'
       },
     ],
   },
@@ -119,7 +123,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Frames',
-        name: 'frames',
+        name: 'Ltx1Frames',
         type: 'number',
         description: 'Number of video frames to generate',
         typeOptions: {
@@ -135,6 +139,23 @@ const properties: INodeProperties[] = [
         default: 120,
       },
       {
+        displayName: 'Frames',
+        name: 'Ltx2Frames',
+        type: 'number',
+        description: 'Number of video frames to generate',
+        typeOptions: {
+          maxValue: 241,
+          minValue: 49,
+          numberPrecision: 0,
+        },
+        displayOptions: {
+          show: {
+            '/model': ['Ltx2_19B_Dist_FP8']
+          },
+        },
+        default: 120,
+      },
+      {
         displayName: 'Negative Prompt',
         name: 'negativePrompt',
         type: 'string',
@@ -144,10 +165,15 @@ const properties: INodeProperties[] = [
         typeOptions: {
           rows: 1,
         },
+        displayOptions: {
+          show: {
+            '/model': ['Ltxv_13B_0_9_8_Distilled_FP8']
+          },
+        },
       },
       {
         displayName: 'Resolution',
-        name: 'LtxLandscapeSize',
+        name: 'Ltx1LandscapeSize',
         type: 'options',
         description: 'Width and height of the generated video in pixels',
         options: [
@@ -174,7 +200,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'LtxPortraitSize',
+        name: 'Ltx1PortraitSize',
         type: 'options',
         description: 'Width and height of the generated video in pixels',
         options: [
@@ -201,7 +227,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'LtxSquareSize',
+        name: 'Ltx1SquareSize',
         type: 'options',
         description: 'Width and height of the generated video in pixels',
         options: [
@@ -225,6 +251,75 @@ const properties: INodeProperties[] = [
           },
         },
         default: '512x512',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Ltx2LandscapeSize',
+        type: 'options',
+        description: 'Width and height of the generated video in pixels',
+        options: [
+          {
+            name: '1024x576',
+            value: '1024x576',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Ltx2_19B_Dist_FP8'],
+            '/ratio': ['landscape'],
+          },
+        },
+        default: '1024x576',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Ltx2PortraitSize',
+        type: 'options',
+        description: 'Width and height of the generated video in pixels',
+        options: [
+          {
+            name: '720x900',
+            value: '720x900',
+          },
+          {
+            name: '819x1024',
+            value: '819x1024',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Ltx2_19B_Dist_FP8'],
+            '/ratio': ['portrait'],
+          },
+        },
+        default: '720x900',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Ltx2SquareSize',
+        type: 'options',
+        description: 'Width and height of the generated video in pixels',
+        options: [
+          {
+            name: '768x768',
+            value: '768x768',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
+          },
+          {
+            name: '1024x1024',
+            value: '1024x1024',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Ltx2_19B_Dist_FP8'],
+            '/ratio': ['square'],
+          },
+        },
+        default: '768x768',
       },
       {
         displayName: 'Seed',
@@ -265,7 +360,7 @@ const displayOptions = {
 export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
-  type Model = 'Ltxv_13B_0_9_8_Distilled_FP8';
+  type Model = 'Ltxv_13B_0_9_8_Distilled_FP8' | 'Ltx2_19B_Dist_FP8';
   type Ratio = 'square' | 'landscape' | 'portrait';
 
   const source = this.getNodeParameter('source', i) as 'text' | 'image';
@@ -275,18 +370,48 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
   const options = this.getNodeParameter('options', i);
 
   // Frames
-  const frames = options.frames as (number | undefined);
+  const frames = (
+    options.Ltx1Frames ??
+    options.Ltx2Frames
+  ) as (number | undefined);
+
+  // FPS, steps, guidance
+  let fps, steps, guidance;
+  if (model === 'Ltx2_19B_Dist_FP8') {
+    fps = 24;
+    steps = 8;
+    guidance = 1.0;
+  } else {
+    fps = 30;
+    steps = 1;
+    guidance = 0.0;
+  }
 
   const size = (
-    options.LtxSquareSize ??
-    options.LtxLandscapeSize ??
-    options.LtxPortraitSize
+    options.Ltx2SquareSize ??
+    options.Ltx2LandscapeSize ??
+    options.Ltx2PortraitSize ??
+    options.Ltx1SquareSize ??
+    options.Ltx1LandscapeSize ??
+    options.Ltx1PortraitSize
   ) as (string | undefined);
 
   // Width and height
   let width: number, height: number;
   if (size == null) {
     switch (`${model}-${ratio}`) {
+      case 'Ltx2_19B_Dist_FP8-square':
+        width = 768;
+        height = 768;
+        break;
+      case 'Ltx2_19B_Dist_FP8-landscape':
+        width = 1024;
+        height = 576;
+        break;
+      case 'Ltx2_19B_Dist_FP8-portrait':
+        width = 720;
+        height = 900;
+        break;
       case 'Ltxv_13B_0_9_8_Distilled_FP8-square':
         width = 512;
         height = 512;
@@ -336,9 +461,9 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
       height: height,
       negative_prompt: negativePrompt,
       seed: seed,
-      steps: 1,
-      guidance: 0.0,
-      fps: 30,
+      steps: steps,
+      guidance: guidance,
+      fps: fps,
       webhook_url: webhookUrl,
     };
 
@@ -369,9 +494,9 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
       last_frame_image: lf,
       negative_prompt: negativePrompt ?? null,
       seed: seed,
-      steps: 1,
-      guidance: 0.0,
-      fps: 30,
+      steps: steps,
+      guidance: guidance,
+      fps: fps,
       webhook_url: webhookUrl,
     };
 
