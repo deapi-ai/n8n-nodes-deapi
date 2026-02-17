@@ -1,11 +1,26 @@
 {
     "name": "n8n-nodes-deapi",
     "version": "0.1.0",
-    "description": "Custom n8n node to interact with the deAPI service.",
+    "description": "n8n community node for deAPI - AI image generation, video generation, transcription and prompt optimization",
     "license": "MIT",
-    "homepage": "",
+    "homepage": "https://github.com/deapi-ai/n8n-nodes-deapi",
     "keywords": [
-        "n8n-community-node-package"
+        "n8n-community-node-package",
+        "n8n",
+        "ai",
+        "deapi",
+        "image-generation",
+        "video-generation",
+        "transcription",
+        "text-to-image",
+        "text-to-video",
+        "flux",
+        "whisper",
+        "background-removal",
+        "upscale",
+        "prompt-optimization",
+        "open-source-ai",
+        "gpu"
     ],
     "author": {
         "name": "Alex Glowacki",
@@ -13,7 +28,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/AleGlowa/n8n-nodes-deapi.git"
+        "url": "https://github.com/deapi-ai/n8n-nodes-deapi.git"
     },
     "scripts": {
         "build": "n8n-node build",
@@ -25,12 +40,22 @@
         "prepublishOnly": "n8n-node prerelease",
         "test": "jest"
     },
+    "bugs": {
+        "url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "files": [
-        "dist"
+        "dist",
+        "!**/*.test.js",
+        "!**/*.test.d.ts",
+        "!**/*.test.js.map",
+        "!dist/tsconfig.tsbuildinfo"
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": true,
+        "strict": false,
         "credentials": [
             "dist/credentials/DeApi.credentials.js"
         ],

@@ -24,21 +24,21 @@ export class Deapi implements INodeType {
 		icon: 'file:deapi.svg',
 		group: ['transform'],
 		version: 1,
-    subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
-		description: 'Interact with deAPI models',
+		subtitle: '={{ $parameter["resource"] + ": " + $parameter["operation"] }}',
+		description:
+			'Generate images, videos, transcribe audio and boost prompts using deAPI AI models',
 		defaults: {
 			name: 'deAPI',
 		},
-    usableAsTool: true,
+		usableAsTool: true,
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
-    // TODO: codex field
-    credentials: [
-      {
-        name: 'deApi',
-        required: true,
-      },
-    ],
+		credentials: [
+			{
+				name: 'deApi',
+				required: true,
+			},
+		],
 		webhooks: [
 			{
 				name: 'default',
@@ -49,39 +49,39 @@ export class Deapi implements INodeType {
 			},
 		],
 		properties: [
-      {
-        displayName: 'Resource',
-        name: 'resource',
-        type: 'options',
-        noDataExpression: true,
-        options: [
-          {
-            name: 'Image',
-            value: 'image',
-          },
-          {
-            name: 'Video',
-            value: 'video',
-          },
-          {
-            name: 'Audio',
-            value: 'audio',
-          },
-          {
-            name: 'Prompt',
-            value: 'prompt',
-          },
-        ],
-        default: 'image',
-      },
-      ...image.description,
-      ...video.description,
-      ...audio.description,
-      ...prompt.description,
+			{
+				displayName: 'Resource',
+				name: 'resource',
+				type: 'options',
+				noDataExpression: true,
+				options: [
+					{
+						name: 'Image',
+						value: 'image',
+					},
+					{
+						name: 'Video',
+						value: 'video',
+					},
+					{
+						name: 'Audio',
+						value: 'audio',
+					},
+					{
+						name: 'Prompt',
+						value: 'prompt',
+					},
+				],
+				default: 'image',
+			},
+			...image.description,
+			...video.description,
+			...audio.description,
+			...prompt.description,
 		],
 	};
 
-  async execute(this: IExecuteFunctions) {
+	async execute(this: IExecuteFunctions) {
 		return await router.call(this);
 	}
 
@@ -130,19 +130,28 @@ export class Deapi implements INodeType {
 		// For completed jobs, download the binary result
 		if (event === 'job.completed') {
 			const data = body.data as IDataObject;
-			const resultUrl = data.result_url as string;
+			const resultUrl = data.result_url as string | undefined;
 
-			// Download and prepare binary data
-			const binaryData = await downloadAndPrepareBinaryData(this, resultUrl);
+			if (resultUrl) {
+				// Download and prepare binary data
+				const binaryData = await downloadAndPrepareBinaryData(this, resultUrl);
 
+				const response: INodeExecutionData = {
+					json: data,
+					binary: {
+						data: binaryData,
+					},
+				};
+
+				return {
+					workflowData: [[response]],
+				};
+			}
+
+			// No result_url (e.g. transcription results) - return JSON directly
 			const response: INodeExecutionData = {
-				json: {},
-				binary: {
-					data: binaryData,
-				},
+				json: body,
 			};
-
-			res.status(200).send('OK');
 
 			return {
 				workflowData: [[response]],
@@ -154,9 +163,7 @@ export class Deapi implements INodeType {
 			json: body,
 		};
 
-		res.status(200).send('OK');
-
-		// Return 200 OK and resume execution with the webhook data
+		// Resume execution with the webhook data (n8n sends 200 via responseMode: 'onReceived')
 		return {
 			workflowData: [[response]],
 		};

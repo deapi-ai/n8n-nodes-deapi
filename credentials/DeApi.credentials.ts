@@ -9,12 +9,11 @@ import type {
 export class DeApi implements ICredentialType {
 	name = 'deApi';
 
-  // TO REMOVE linter rules, which enforces that API string appended.
 	displayName = 'deAPI API';
 
 	documentationUrl = 'https://docs.deapi.ai/quickstart';
 
-  icon: Icon = 'file:deapi.svg';
+	icon: Icon = 'file:deapi.svg';
 
 	properties: INodeProperties[] = [
 		{
@@ -24,7 +23,8 @@ export class DeApi implements ICredentialType {
 			typeOptions: { password: true },
 			required: true,
 			default: '',
-			description: '<a href="https://docs.deapi.ai/quickstart#2-obtain-your-api-key" target="_blank">Get your API key</a>',
+			description:
+				'<a href="https://docs.deapi.ai/quickstart#2-obtain-your-api-key" target="_blank">Get your API key</a>',
 		},
 		{
 			displayName: 'Webhook Secret',
@@ -33,14 +33,15 @@ export class DeApi implements ICredentialType {
 			typeOptions: { password: true },
 			required: true,
 			default: '',
-			description: 'Secret to verify signature from deAPI webhooks. <a href="https://deapi.ai/settings/webhooks" target="_blank">Get your webhook secret</a>',
+			description:
+				'Secret to verify signature from deAPI webhooks. <a href="https://deapi.ai/settings/webhooks" target="_blank">Get your webhook secret</a>',
 		},
 	];
 
 	authenticate: IAuthenticateGeneric = {
 		type: 'generic',
 		properties: {
-      headers: {
+			headers: {
 				Authorization: '=Bearer {{$credentials.apiKey}}',
 			},
 		},
@@ -48,11 +49,11 @@ export class DeApi implements ICredentialType {
 
 	test: ICredentialTestRequest = {
 		request: {
-      baseURL: 'https://api.deapi.ai/api/v1/client',
-      url: '/models?per_page=15&page=1',
-      headers: {
-        Accept: 'application/json',
-      },
+			baseURL: 'https://api.deapi.ai/api/v1/client',
+			url: '/models?per_page=15&page=1',
+			headers: {
+				Accept: 'application/json',
+			},
 		},
 	};
 }

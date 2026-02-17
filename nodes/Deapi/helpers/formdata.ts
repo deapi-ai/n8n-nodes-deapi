@@ -1,7 +1,7 @@
 export interface FormdataFileValue {
-  filename: string;
-  contentType: string;
-  content: Buffer;
+	filename: string;
+	contentType: string;
+	content: Buffer;
 }
 
 type FormdataValue = string | number | boolean | FormdataFileValue | null;
@@ -16,33 +16,37 @@ type FormdataValue = string | number | boolean | FormdataFileValue | null;
  * @returns A Buffer containing the complete multipart/form-data body
  */
 export function generateFormdataBody(
-  boundary: string,
-  request: Record<string, FormdataValue>,
+	boundary: string,
+	request: Record<string, FormdataValue>,
 ): Buffer {
-  const parts: Buffer[] = [];
+	const parts: Buffer[] = [];
 
-  for (const [name, value] of Object.entries(request)) {
-    if (typeof value === 'object' && value !== null) {
-      // File field
-      parts.push(Buffer.from(
-        `--${boundary}\r\n` +
-        `Content-Disposition: form-data; name="${name}"; filename="${value.filename}"\r\n` +
-        `Content-Type: ${value.contentType}\r\n\r\n`
-      ));
-      parts.push(value.content);
-      parts.push(Buffer.from('\r\n'));
-    } else {
-      // Text field (string, number, boolean, null)
-      parts.push(Buffer.from(
-        `--${boundary}\r\n` +
-        `Content-Disposition: form-data; name="${name}"\r\n\r\n` +
-        `${value ?? ''}\r\n`
-      ));
-    }
-  }
+	for (const [name, value] of Object.entries(request)) {
+		if (typeof value === 'object' && value !== null) {
+			// File field
+			parts.push(
+				Buffer.from(
+					`--${boundary}\r\n` +
+						`Content-Disposition: form-data; name="${name}"; filename="${value.filename}"\r\n` +
+						`Content-Type: ${value.contentType}\r\n\r\n`,
+				),
+			);
+			parts.push(value.content);
+			parts.push(Buffer.from('\r\n'));
+		} else {
+			// Text field (string, number, boolean, null)
+			parts.push(
+				Buffer.from(
+					`--${boundary}\r\n` +
+						`Content-Disposition: form-data; name="${name}"\r\n\r\n` +
+						`${value ?? ''}\r\n`,
+				),
+			);
+		}
+	}
 
-  // Add closing boundary
-  parts.push(Buffer.from(`--${boundary}--\r\n`));
+	// Add closing boundary
+	parts.push(Buffer.from(`--${boundary}--\r\n`));
 
-  return Buffer.concat(parts);
+	return Buffer.concat(parts);
 }
