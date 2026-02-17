@@ -422,7 +422,7 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 		const parts = size.split('x').map(Number);
 		width = parts[0];
 		height = parts[1];
-		if (!Number.isFinite(width) || !Number.isFinite(height)) {
+		if (parts.length !== 2 || !Number.isFinite(width) || !Number.isFinite(height)) {
 			throw new Error(`Invalid resolution format: "${size}". Expected "WIDTHxHEIGHT".`);
 		}
 	}
