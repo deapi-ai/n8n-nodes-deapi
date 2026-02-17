@@ -1,46 +1,76 @@
 # n8n-nodes-deapi
 
-This is an n8n community node. It lets you use _app/service name_ in your n8n workflows.
+This is an n8n community node that lets you use [deAPI](https://deapi.ai/) in your n8n workflows.
 
-_App/service name_ is _one or two sentences describing the service this node integrates with_.
+deAPI is a unified API platform providing instant access to open-source AI models through a decentralized GPU network. No setup, no limits - one API key to access thousands of GPUs with up to 20x lower costs.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
-
-[Installation](#installation)
-[Operations](#operations)
-[Credentials](#credentials)
-[Compatibility](#compatibility)
-[Usage](#usage)
-[Resources](#resources)
-[Version history](#version-history)
 
 ## Installation
 
 Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
 
-## Operations
-
-_List the operations supported by your node._
-
 ## Credentials
 
-_If users need to authenticate with the app/service, provide details here. You should include prerequisites (such as signing up with the service), available authentication methods, and how to set them up._
+To use this node, you need to configure the following credentials:
+
+| Field | Description |
+|-------|-------------|
+| **API Key** | Your deAPI API key. Get it from the [deAPI Quickstart Guide](https://docs.deapi.ai/quickstart#2-obtain-your-api-key). |
+| **Webhook Secret** | Secret used to verify webhook signatures. Configure it at [deAPI Webhook Settings](https://deapi.ai/settings/webhooks). |
+
+## Operations
+
+### Image
+
+| Operation | Description | Model |
+|-----------|-------------|-------|
+| **Generate** | Generate an image from a text prompt | FLUX.1 Schnell, FLUX.2 Klein 4B, Z-Image Turbo |
+| **Remove Background** | Remove the background from an image | Ben2 |
+| **Upscale** | Increase image resolution by 4x | RealESRGAN x4 |
+
+### Video
+
+| Operation | Description | Model |
+|-----------|-------------|-------|
+| **Generate** | Generate a video from text or image(s) | LTX-Video 0.9.8, LTX-2 19B |
+| **Transcribe** | Transcribe video to text (supports YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
+
+### Audio
+
+| Operation | Description | Model |
+|-----------|-------------|-------|
+| **Transcribe** | Transcribe audio file to text | Whisper Large V3 |
+
+### Prompt
+
+| Operation | Description |
+|-----------|-------------|
+| **Image Prompt Booster** | Optimize a prompt for text-to-image generation |
+| **Video Prompt Booster** | Optimize a prompt for text/image-to-video generation |
+
+## How It Works
+
+Generation operations (image, video, audio transcription) use a webhook-based waiting pattern:
+
+1. The node submits a generation request to deAPI with a webhook URL
+2. The workflow pauses while deAPI processes the request
+3. When deAPI completes the job, it sends a webhook notification
+4. The workflow resumes with the generated content
+
+This approach ensures efficient resource usage - the workflow doesn't actively poll for results.
 
 ## Compatibility
 
-_State the minimum n8n version, as well as which versions you test against. You can also include any known version incompatibility issues._
-
-## Usage
-
-_This is an optional section. Use it to help users with any difficult or confusing aspects of the node._
-
-_By the time users are looking for community nodes, they probably already know n8n basics. But if you expect new users, you can link to the [Try it out](https://docs.n8n.io/try-it-out/) documentation to help them get started._
+- Tested with n8n version 2.3.4
+- Webhook-based operations require n8n to be accessible via HTTPS
 
 ## Resources
 
-* [n8n community nodes documentation](https://docs.n8n.io/integrations/#community-nodes)
-* _Link to app/service documentation._
+- [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
+- [deAPI Documentation](https://docs.deapi.ai/)
+- [deAPI Website](https://deapi.ai/)
 
-## Version history
+## License
 
-_This is another optional section. If your node has multiple versions, include a short description of available versions and what changed, as well as any compatibility impact._
+[MIT](LICENSE)

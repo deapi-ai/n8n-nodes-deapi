@@ -12,7 +12,7 @@ export class DeApi implements ICredentialType {
   // TO REMOVE linter rules, which enforces that API string appended.
 	displayName = 'deAPI API';
 
-	documentationUrl = 'https://docs.deapi.ai/quickstart#2-obtain-your-api-key';
+	documentationUrl = 'https://docs.deapi.ai/quickstart';
 
   icon: Icon = 'file:deapi.svg';
 
@@ -24,6 +24,16 @@ export class DeApi implements ICredentialType {
 			typeOptions: { password: true },
 			required: true,
 			default: '',
+			description: '<a href="https://docs.deapi.ai/quickstart#2-obtain-your-api-key" target="_blank">Get your API key</a>',
+		},
+		{
+			displayName: 'Webhook Secret',
+			name: 'webhookSecret',
+			type: 'string',
+			typeOptions: { password: true },
+			required: true,
+			default: '',
+			description: 'Secret to verify signature from deAPI webhooks. <a href="https://deapi.ai/settings/webhooks" target="_blank">Get your webhook secret</a>',
 		},
 	];
 

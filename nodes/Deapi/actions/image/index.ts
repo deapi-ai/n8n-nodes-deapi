@@ -1,8 +1,10 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 import * as generate from './generate.operation';
+import * as removeBackground from './removeBackground.operation';
+import * as upscale from './upscale.operation';
 
-export { generate };
+export { generate, removeBackground, upscale };
 
 export const description: INodeProperties[] = [
   {
@@ -18,10 +20,16 @@ export const description: INodeProperties[] = [
         description: 'Generates an image from a text prompt'
       },
       {
-        name: 'Edit Image',
-        value: 'edit',
-        action: 'Edit image',
-        description: 'Generates a new image from an image'
+        name: 'Remove Background',
+        value: 'removeBackground',
+        action: 'Remove background',
+        description: 'Remove the background from an image'
+      },
+      {
+        name: 'Upscale an Image',
+        value: 'upscale',
+        action: 'Upscale an image',
+        description: 'Increase an image resolution x4'
       }
     ],
     default: 'generate',
@@ -32,4 +40,6 @@ export const description: INodeProperties[] = [
     },
   },
   ...generate.description,
+  ...removeBackground.description,
+  ...upscale.description,
 ];

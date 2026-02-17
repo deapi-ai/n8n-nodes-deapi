@@ -7,7 +7,6 @@ import { updateDisplayOptions } from 'n8n-workflow';
 
 import type {
   TextToImageRequest,
-  GenerationResponse,
 } from '../../helpers/interfaces';
 import { apiRequest } from '../../transport';
 
@@ -25,22 +24,12 @@ const properties: INodeProperties[] = [
     },
   },
   {
-    displayName: 'Negative Prompt',
-    name: 'negative_prompt',
-    type: 'string',
-    placeholder: 'e.g. blur, darkness, noise',
-    description: 'Elements to avoid in the generated image',
-    default: '',
-    typeOptions: {
-      rows: 1,
-    },
-  },
-  {
     displayName: 'Model',
     name: 'model',
     type: 'options',
     description: 'The model to use for image generation',
-    default: 'ZImageTurbo_INT8',
+    default: 'Flux_2_Klein_4B_BF16',
+    required: true,
     options: [
       {
         name: 'Z-Image-Turbo INT8',
@@ -50,6 +39,10 @@ const properties: INodeProperties[] = [
         name: 'Flux.1 Schnell',
         value: 'Flux1schnell'
       },
+      {
+        name: 'FLUX.2 Klein 4B BF16',
+        value: 'Flux_2_Klein_4B_BF16'
+      },
     ],
   },
   {
@@ -57,6 +50,7 @@ const properties: INodeProperties[] = [
     name: 'ratio',
     type: 'options',
     description: 'Aspect ratio of the generated image',
+    required: true,
     options: [
       {
         name: 'Square',
@@ -81,39 +75,36 @@ const properties: INodeProperties[] = [
     type: 'collection',
     default: {},
     options: [
-      // {
-      //   displayName: 'Quality',
-      //   name: 'quality',
-      //   type: 'options',
-      //   description: 'The quality of the image that will be generated',
-      //   options: [
-      //     {
-      //       name: 'High',
-      //       value: 'high'
-      //     },
-      //     {
-      //       name: 'Medium',
-      //       value: 'medium'
-      //     },
-      //     {
-      //       name: 'Low',
-      //       value: 'low'
-      //     },
-      //   ],
-      //   displayOptions: {
-      //     show: {
-      //       '/model': ['ZImageTurbo_INT8', 'Flux1schnell']
-      //     },
-      //   },
-      //   // TO DECIDE the default quality of generated image.
-      //   default: 'medium',
-      // },
+      {
+        displayName: 'Negative Prompt',
+        name: 'negativePrompt',
+        type: 'string',
+        placeholder: 'e.g. blur, darkness, noise',
+        description: 'Elements to avoid in the generated image',
+        default: '',
+        typeOptions: {
+          rows: 1,
+        },
+        displayOptions: {
+          show: {
+            '/model': ['Flux1schnell', 'ZImageTurbo_INT8'],
+          },
+        },
+      },
       {
         displayName: 'Resolution',
-        name: 'square_size',
+        name: 'Flux1SquareSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
+          {
+            name: '1024x1024',
+            value: '1024x1024',
+          },
+          {
+            name: '2048x2048',
+            value: '2048x2048',
+          },
           {
             name: '256x256',
             value: '256x256',
@@ -126,6 +117,56 @@ const properties: INodeProperties[] = [
             name: '768x768',
             value: '768x768',
           },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux1schnell'],
+            '/ratio': ['square'],
+          },
+        },
+        default: '768x768',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'Flux2SquareSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1024x1024',
+            value: '1024x1024',
+          },
+          {
+            name: '1536x1536',
+            value: '1536x1536',
+          },
+          {
+            name: '256x256',
+            value: '256x256',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
+          },
+          {
+            name: '768x768',
+            value: '768x768',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['square'],
+          },
+        },
+        default: '1024x1024',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'ZImageSquareSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
           {
             name: '1024x1024',
             value: '1024x1024',
@@ -134,10 +175,22 @@ const properties: INodeProperties[] = [
             name: '2048x2048',
             value: '2048x2048',
           },
+          {
+            name: '256x256',
+            value: '256x256',
+          },
+          {
+            name: '512x512',
+            value: '512x512',
+          },
+          {
+            name: '768x768',
+            value: '768x768',
+          },
         ],
         displayOptions: {
           show: {
-            '/model': ['ZImageTurbo_INT8', 'Flux1schnell'],
+            '/model': ['ZImageTurbo_INT8'],
             '/ratio': ['square'],
           },
         },
@@ -145,7 +198,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'ZImageTurbo_INT8_landscape_size',
+        name: 'ZImageLandscapeSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -164,7 +217,7 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'Flux1schnell_landscape_size',
+        name: 'Flux1LandscapeSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
@@ -187,36 +240,40 @@ const properties: INodeProperties[] = [
       },
       {
         displayName: 'Resolution',
-        name: 'ZImageTurbo_INT8_portrait_size',
+        name: 'Flux2LandscapeSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
           {
-            name: '1152x2048',
-            value: '1152x2048',
+            name: '1280x720',
+            value: '1280x720',
+          },
+          {
+            name: '1536x864',
+            value: '1536x864',
           },
         ],
         displayOptions: {
           show: {
-            '/model': ['ZImageTurbo_INT8'],
-            '/ratio': ['portrait'],
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['landscape'],
           },
         },
-        default: '1152x2048',
+        default: '1280x720',
       },
       {
         displayName: 'Resolution',
-        name: 'Flux1schnell_portrait_size',
+        name: 'Flux1PortraitSize',
         type: 'options',
         description: 'Width and height of the generated image in pixels',
         options: [
           {
-            name: '720x1280',
-            value: '720x1280',
+            name: '1024x1280',
+            value: '1024x1280',
           },
           {
-            name: '1152x2048',
-            value: '1152x2048',
+            name: '1536x1920',
+            value: '1536x1920',
           },
         ],
         displayOptions: {
@@ -225,28 +282,74 @@ const properties: INodeProperties[] = [
             '/ratio': ['portrait'],
           },
         },
-        default: '720x1280',
+        default: '1024x1280',
       },
       {
-        displayName: 'Steps',
-        name: 'ZImageTurbo_INT8_steps',
-        type: 'number',
-        description: 'Number of inference steps',
-        typeOptions: {
-          maxValue: 50,
-          minValue: 1,
-          numberPrecision: 0,
-        },
+        displayName: 'Resolution',
+        name: 'Flux2PortraitSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '768x960',
+            value: '768x960',
+          },
+          {
+            name: '1216x1520',
+            value: '1216x1520',
+          },
+        ],
         displayOptions: {
           show: {
-            '/model': ['ZImageTurbo_INT8']
+            '/model': ['Flux_2_Klein_4B_BF16'],
+            '/ratio': ['portrait'],
           },
         },
-        default: 8,
+        default: '1216x1520',
+      },
+      {
+        displayName: 'Resolution',
+        name: 'ZImagePortraitSize',
+        type: 'options',
+        description: 'Width and height of the generated image in pixels',
+        options: [
+          {
+            name: '1600x2000',
+            value: '1600x2000',
+          },
+          {
+            name: '768x960',
+            value: '768x960',
+          },
+          {
+            name: '1216x1520',
+            value: '1216x1520',
+          },
+        ],
+        displayOptions: {
+          show: {
+            '/model': ['ZImageTurbo_INT8'],
+            '/ratio': ['portrait'],
+          },
+        },
+        default: '1216x1520',
+      },
+      {
+        displayName: 'Seed',
+        name: 'seed',
+        type: 'number',
+        description: 'Random seed for generation. By default seed is random.',
+        typeOptions: {
+          // Max 32-bit unsigned number
+          maxValue: 4_294_967_295,
+          minValue: -1,
+          numberPrecision: 0,
+        },
+        default: -1,
       },
       {
         displayName: 'Steps',
-        name: 'Flux1schnell_steps',
+        name: 'Flux1Steps',
         type: 'number',
         description: 'Number of inference steps',
         typeOptions: {
@@ -262,17 +365,33 @@ const properties: INodeProperties[] = [
         default: 4,
       },
       {
-        displayName: 'Seed',
-        name: 'seed',
+        displayName: 'Steps',
+        name: 'ZImageSteps',
         type: 'number',
-        description: 'Random seed for generation. By default seed is random.',
+        description: 'Number of inference steps',
         typeOptions: {
-          // Max 32-bit unsigned number
-          maxValue: 4_294_967_295,
-          minValue: -1,
+          maxValue: 50,
+          minValue: 1,
           numberPrecision: 0,
         },
-        default: -1,
+        displayOptions: {
+          show: {
+            '/model': ['ZImageTurbo_INT8']
+          },
+        },
+        default: 8,
+      },
+      {
+        displayName: 'Wait Timeout',
+        name: 'waitTimeout',
+        type: 'number',
+        description: 'Maximum time to wait for completion in seconds',
+        default: 60,
+        typeOptions: {
+          minValue: 30,
+          maxValue: 240, // 4 minutes
+          numberPrecision: 0,
+        },
       },
     ]
   }
@@ -289,27 +408,28 @@ export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
   // Combine these types for switch statements, to conclude default values when options aren't provided.
-  type Model = 'ZImageTurbo_INT8' | 'Flux1schnell';
+  type Model = 'ZImageTurbo_INT8' | 'Flux1schnell' | 'Flux_2_Klein_4B_BF16';
   type Ratio = 'square' | 'landscape' | 'portrait';
 
   const prompt = this.getNodeParameter('prompt', i) as string;
-  const negativePrompt = this.getNodeParameter('negative_prompt', i) as string;
   const model = this.getNodeParameter('model', i) as Model;
   const ratio = this.getNodeParameter('ratio', i) as Ratio;
   const options = this.getNodeParameter('options', i);
 
+  // Negative Prompt
+  const negativePrompt = options.negativePrompt as (string | undefined);
+
   const size = (
-    options.square_size ??
-    options.ZImageTurbo_INT8_landscape_size ??
-    options.ZImageTurbo_INT8_portrait_size ??
-    options.Flux1schnell_landscape_size ??
-    options.Flux1schnell_portrait_size
+    options.Flux2SquareSize ??
+    options.Flux2LandscapeSize ??
+    options.Flux2PortraitSize ??
+    options.ZImageSquareSize ??
+    options.ZImageLandscapeSize ??
+    options.ZImagePortraitSize ??
+    options.Flux1SquareSize ??
+    options.Flux1LandscapeSize ??
+    options.Flux1PortraitSize
   ) as string;
-  delete options.Flux1schnell_portrait_size;
-  delete options.ZImageTurbo_INT8_portrait_size;
-  delete options.Flux1schnell_landscape_size;
-  delete options.ZImageTurbo_INT8_landscape_size;
-  delete options.square_size;
 
   // Width and height
   let width: number, height: number;
@@ -320,17 +440,26 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
         width = 768;
         height = 768;
         break;
+      case 'Flux_2_Klein_4B_BF16-square':
+        width = 1024;
+        height = 1024;
+        break;
       case 'ZImageTurbo_INT8-landscape':
         width = 2048;
         height = 1152;
         break;
       case 'Flux1schnell-landscape':
+      case 'Flux_2_Klein_4B_BF16-landscape':
         width = 1280;
         height = 720;
         break;
       case 'ZImageTurbo_INT8-portrait':
         width = 1152;
         height = 2048;
+        break;
+      case 'Flux_2_Klein_4B_BF16-portrait':
+        width = 1216;
+        height = 1520;
         break;
       case 'Flux1schnell-portrait':
       default:
@@ -344,29 +473,40 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
   // Steps
   let steps = (
-    options.ZImageTurbo_INT8_steps ??
-    options.Flux1schnell_steps
-  ) as number;
+    options.ZImageSteps ??
+    options.Flux1Steps
+  ) as (number | undefined);
   if (steps == null) {
     switch (model) {
       case 'ZImageTurbo_INT8':
         steps = 8;
         break;
       case 'Flux1schnell':
+      case 'Flux_2_Klein_4B_BF16':
         steps = 4;
         break;
     }
   }
-  delete options.Flux1schnell_steps;
-  delete options.ZImageTurbo_INT8_steps;
 
   // Seed
-  let seed = options.seed as number;
+  let seed = options.seed as (number | undefined);
   if (seed == null || seed === -1) {
     seed = Math.floor(Math.random() * 4_294_967_296);
   }
-  delete options.seed;
 
+  // Get wait timeout configuration (in seconds)
+  const waitTimeout = options.waitTimeout as (number | undefined) ?? 60;
+
+  // Calculate wait time (convert seconds to milliseconds)
+  const waitTill = new Date(Date.now() + waitTimeout * 1000);
+
+  // Put execution to wait FIRST - this registers the waiting webhook
+  await this.putExecutionToWait(waitTill);
+
+  // NOW get the webhook resume URL (after the webhook is registered)
+  const webhookUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+
+  // Build the request body with webhook URL
   const body: TextToImageRequest = {
     prompt: prompt,
     negative_prompt: negativePrompt,
@@ -375,14 +515,13 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
     height: height,
     steps: steps,
     seed: seed,
+    webhook_url: webhookUrl,
   };
 
-  const response = await (apiRequest.call(this, 'POST', '/txt2img', { body })) as GenerationResponse;
+  // Submit the request to deAPI
+  await apiRequest.call(this, 'POST', '/txt2img', { body });
 
-  return [{
-    json: response,
-    pairedItem: {
-      item: i,
-    }
-  }];
+  // Return the current input data
+  // When the webhook is called, the webhook() method will provide the actual output
+  return this.getInputData();
 }

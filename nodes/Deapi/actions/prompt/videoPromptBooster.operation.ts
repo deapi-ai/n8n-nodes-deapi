@@ -1,5 +1,3 @@
-import FormData from 'form-data';
-
 import {
   IExecuteFunctions,
   INodeExecutionData,
@@ -9,7 +7,8 @@ import {
 
 import { apiRequest } from "../../transport";
 import { getBinaryDataFile } from '../../helpers/binary-data';
-import { BoosterResponse } from "../../helpers/interfaces";
+import { generateFormdataBody } from '../../helpers/formdata';
+import type { VideoPromptBoosterRequest, BoosterResponse } from "../../helpers/interfaces";
 
 const properties: INodeProperties[] = [
   {
@@ -18,7 +17,7 @@ const properties: INodeProperties[] = [
     type: 'string',
     required: true,
     placeholder: 'e.g. A cinematic video sequence',
-    description: 'A prompt to boost',
+    description: 'A prompt to boost for video generation',
     default: '',
     typeOptions: {
       rows: 1,
@@ -56,7 +55,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
 	show: {
-		operation: ['videoPromptBooster'],
+		operation: ['boostVideo'],
 		resource: ['prompt'],
 	},
 };
@@ -65,30 +64,35 @@ export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 
-  const formData = new FormData();
   const prompt = this.getNodeParameter('prompt', i) as string;
   const options = this.getNodeParameter('options', i);
   const negativePrompt = options.negative_prompt as (string | undefined);
   const refImage = options.binaryPropertyName as (string | undefined);
 
+  let image: VideoPromptBoosterRequest['image'] = null;
   if (refImage) {
     const { fileContent, contentType, filename } = await getBinaryDataFile(this, i, refImage);
-  
-    formData.append('image', fileContent, {
-      filename,
-      contentType,
-    })
-  } else {
-    formData.append('image', '');
+    image = { filename: filename || 'file', contentType, content: fileContent };
   }
 
-  formData.append('prompt', prompt);
+  const request: VideoPromptBoosterRequest = {
+    prompt,
+    negative_prompt: negativePrompt ?? null,
+    image,
+  };
 
-  formData.append('negative_prompt', negativePrompt ?? '');
+  const boundary = `----n8nFormBoundary${Date.now()}`;
+  const body = generateFormdataBody(boundary, request);
 
-  const response = await (apiRequest.call(this, 'POST', '/prompt/video', {
-    option: { body: formData },
-  })) as BoosterResponse;
+  const response = await apiRequest.call(this, 'POST', '/prompt/video', {
+    headers: {
+      'Content-Type': `multipart/form-data; boundary=${boundary}`,
+    },
+    option: {
+      body,
+      json: false,
+    },
+  }) as BoosterResponse;
 
   return [{
     json: response,

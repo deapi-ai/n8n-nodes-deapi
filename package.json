@@ -32,11 +32,11 @@
         "n8nNodesApiVersion": 1,
         "strict": true,
         "credentials": [
-            "credentials/DeApi.credentials.ts",
-            "credentials/DeApiWebhook.credentials.ts"
+            "dist/credentials/DeApi.credentials.js"
         ],
         "nodes": [
-            "dist/nodes/Example/Example.node.js"
+            "dist/nodes/Deapi/Deapi.node.js",
+            "dist/nodes/Deapi/DeapiTrigger.node.js"
         ]
     },
     "devDependencies": {

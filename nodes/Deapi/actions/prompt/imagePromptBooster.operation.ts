@@ -18,7 +18,7 @@ const properties: INodeProperties[] = [
     type: 'string',
     required: true,
     placeholder: 'e.g. Red Bull F1 car from 2025',
-    description: 'A prompt to boost',
+    description: 'A prompt to boost for image generation',
     default: '',
     typeOptions: {
       rows: 1,
@@ -33,7 +33,7 @@ const properties: INodeProperties[] = [
     options: [
       {
         displayName: 'Negative Prompt',
-        name: 'negative_prompt',
+        name: 'negativePrompt',
         type: 'string',
         placeholder: 'e.g. blur, darkness, noise',
         description: 'A negative prompt to boost',
@@ -48,7 +48,7 @@ const properties: INodeProperties[] = [
 
 const displayOptions = {
 	show: {
-		operation: ['imagePromptBooster'],
+		operation: ['boostImage'],
 		resource: ['prompt'],
 	},
 };
@@ -58,7 +58,8 @@ export const description = updateDisplayOptions(displayOptions, properties);
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 
   const prompt = this.getNodeParameter('prompt', i) as string;
-  const negativePrompt = this.getNodeParameter('options', i).negative_prompt as string;
+  const options = this.getNodeParameter('options', i);
+  const negativePrompt = options.negativePrompt as (string | undefined);
 
   // It doesn't consider the case where `prompt` or `negativePrompt`
   // don't have at least 3 characters. In this case, error from api is received.
