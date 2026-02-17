@@ -43,7 +43,7 @@ export interface BoosterResponse extends IDataObject {
 	negative_prompt: string | null;
 }
 
-/* Here stars types for form-data content type */
+/* Form-data content type request interfaces */
 export type VideoPromptBoosterRequest = {
 	prompt: string;
 	negative_prompt: string | null;

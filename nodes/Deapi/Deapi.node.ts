@@ -137,7 +137,7 @@ export class Deapi implements INodeType {
 				const binaryData = await downloadAndPrepareBinaryData(this, resultUrl);
 
 				const response: INodeExecutionData = {
-					json: {},
+					json: data,
 					binary: {
 						data: binaryData,
 					},

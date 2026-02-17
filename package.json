@@ -6,11 +6,21 @@
     "homepage": "https://github.com/deapi-ai/n8n-nodes-deapi",
     "keywords": [
         "n8n-community-node-package",
+        "n8n",
         "ai",
+        "deapi",
         "image-generation",
         "video-generation",
         "transcription",
-        "deapi"
+        "text-to-image",
+        "text-to-video",
+        "flux",
+        "whisper",
+        "background-removal",
+        "upscale",
+        "prompt-optimization",
+        "open-source-ai",
+        "gpu"
     ],
     "author": {
         "name": "Alex Glowacki",

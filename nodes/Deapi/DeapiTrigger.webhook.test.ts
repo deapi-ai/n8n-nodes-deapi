@@ -171,7 +171,7 @@ describe('DeapiTrigger webhook handler', () => {
 
 			expect(result.workflowData).toBeDefined();
 			expect(result.workflowData![0][0].binary).toEqual({ data: preparedBinaryData });
-			expect(result.workflowData![0][0].json).toEqual({});
+			expect(result.workflowData![0][0].json).toEqual({ result_url: resultUrl });
 		});
 
 		it('should return JSON when downloadBinary is false', async () => {

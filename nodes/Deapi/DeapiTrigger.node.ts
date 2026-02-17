@@ -179,7 +179,7 @@ export class DeapiTrigger implements INodeType {
 						workflowData: [
 							[
 								{
-									json: {},
+									json: data,
 									binary: {
 										data: binaryData,
 									},

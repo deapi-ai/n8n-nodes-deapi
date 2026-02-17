@@ -140,7 +140,10 @@ describe('Deapi webhook handler', () => {
 			expect(statusMock).toHaveBeenCalledWith(200);
 			expect(result.workflowData).toBeDefined();
 			expect(result.workflowData![0][0].binary).toEqual({ data: preparedBinaryData });
-			expect(result.workflowData![0][0].json).toEqual({});
+			expect(result.workflowData![0][0].json).toEqual({
+				result_url: resultUrl,
+				job_request_id: 'req_123',
+			});
 		});
 
 		it('should return JSON data when result_url is not present', async () => {

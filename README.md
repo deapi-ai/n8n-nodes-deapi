@@ -1,8 +1,11 @@
 # n8n-nodes-deapi
 
+[![npm version](https://img.shields.io/npm/v/n8n-nodes-deapi.svg)](https://www.npmjs.com/package/n8n-nodes-deapi)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 This is an n8n community node that lets you use [deAPI](https://deapi.ai/) in your n8n workflows.
 
-deAPI is a unified API platform providing instant access to open-source AI models through a decentralized GPU network. No setup, no limits - one API key to access thousands of GPUs with up to 20x lower costs.
+deAPI is a unified API platform providing instant access to open-source AI models (FLUX, LTX Video, Whisper and more) through a decentralized GPU network. One API key to access thousands of GPUs with up to 20x lower costs.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 
@@ -23,23 +26,23 @@ To use this node, you need to configure the following credentials:
 
 ### Image
 
-| Operation | Description | Model |
-|-----------|-------------|-------|
+| Operation | Description | Models |
+|-----------|-------------|--------|
 | **Generate** | Generate an image from a text prompt | FLUX.1 Schnell, FLUX.2 Klein 4B, Z-Image Turbo |
 | **Remove Background** | Remove the background from an image | Ben2 |
 | **Upscale** | Increase image resolution by 4x | RealESRGAN x4 |
 
 ### Video
 
-| Operation | Description | Model |
-|-----------|-------------|-------|
+| Operation | Description | Models |
+|-----------|-------------|--------|
 | **Generate** | Generate a video from text or image(s) | LTX-Video 0.9.8, LTX-2 19B |
-| **Transcribe** | Transcribe video to text (supports YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
+| **Transcribe** | Transcribe video to text (YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
 
 ### Audio
 
-| Operation | Description | Model |
-|-----------|-------------|-------|
+| Operation | Description | Models |
+|-----------|-------------|--------|
 | **Transcribe** | Transcribe audio file to text | Whisper Large V3 |
 
 ### Prompt
@@ -51,12 +54,12 @@ To use this node, you need to configure the following credentials:
 
 ## How It Works
 
-Generation operations (image, video, audio transcription) use a webhook-based waiting pattern:
+Generation operations (image, video, transcription) use a webhook-based waiting pattern:
 
 1. The node submits a generation request to deAPI with a webhook URL
 2. The workflow pauses while deAPI processes the request
 3. When deAPI completes the job, it sends a webhook notification
-4. The workflow resumes with the generated content
+4. The workflow resumes with the generated content (binary file or text)
 
 This approach ensures efficient resource usage - the workflow doesn't actively poll for results.
 
