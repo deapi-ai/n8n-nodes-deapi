@@ -7,39 +7,39 @@ import * as upscale from './upscale.operation';
 export { generate, removeBackground, upscale };
 
 export const description: INodeProperties[] = [
-  {
-    displayName: 'Operation',
-    name: 'operation',
-    type: 'options',
-    noDataExpression: true,
-    options: [
-      {
-        name: 'Generate an Image',
-        value: 'generate',
-        action: 'Generate an image',
-        description: 'Generates an image from a text prompt'
-      },
-      {
-        name: 'Remove Background',
-        value: 'removeBackground',
-        action: 'Remove background',
-        description: 'Remove the background from an image'
-      },
-      {
-        name: 'Upscale an Image',
-        value: 'upscale',
-        action: 'Upscale an image',
-        description: 'Increase an image resolution x4'
-      }
-    ],
-    default: 'generate',
-    displayOptions: {
-      show: {
-        resource: ['image'],
-      },
-    },
-  },
-  ...generate.description,
-  ...removeBackground.description,
-  ...upscale.description,
+	{
+		displayName: 'Operation',
+		name: 'operation',
+		type: 'options',
+		noDataExpression: true,
+		options: [
+			{
+				name: 'Generate an Image',
+				value: 'generate',
+				action: 'Generate an image',
+				description: 'Generates an image from a text prompt',
+			},
+			{
+				name: 'Remove Background',
+				value: 'removeBackground',
+				action: 'Remove background',
+				description: 'Remove the background from an image',
+			},
+			{
+				name: 'Upscale an Image',
+				value: 'upscale',
+				action: 'Upscale an image',
+				description: 'Increase an image resolution x4',
+			},
+		],
+		default: 'generate',
+		displayOptions: {
+			show: {
+				resource: ['image'],
+			},
+		},
+	},
+	...generate.description,
+	...removeBackground.description,
+	...upscale.description,
 ];

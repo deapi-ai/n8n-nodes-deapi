@@ -34,8 +34,8 @@ describe('Deapi router', () => {
 	});
 
 	it.each(operationMocks)('should call the correct method', async (mock, resource, operation) => {
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? resource : operation),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? resource : operation,
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([
 			{
@@ -57,8 +57,8 @@ describe('Deapi router', () => {
 	});
 
 	it('should return an error if the operation is not supported', async () => {
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? 'foo' : 'bar'),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? 'foo' : 'bar',
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([{ json: {} }]);
 
@@ -68,8 +68,8 @@ describe('Deapi router', () => {
 	});
 
 	it('should loop over all items', async () => {
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? 'image' : 'generate'),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? 'image' : 'generate',
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([
 			{
@@ -101,8 +101,8 @@ describe('Deapi router', () => {
 
 	it('should continue on fail', async () => {
 		mockExecuteFunctions.continueOnFail.mockReturnValue(true);
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? 'image' : 'generate'),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? 'image' : 'generate',
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([{ json: {} }, { json: {} }]);
 		mockImageGenerate.mockRejectedValue(new Error('Some error'));
@@ -119,8 +119,8 @@ describe('Deapi router', () => {
 
 	it('should throw an error if continueOnFail is false', async () => {
 		mockExecuteFunctions.continueOnFail.mockReturnValue(false);
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? 'image' : 'generate'),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? 'image' : 'generate',
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([{ json: {} }]);
 		mockImageGenerate.mockRejectedValue(new Error('Some error'));
@@ -130,11 +130,13 @@ describe('Deapi router', () => {
 
 	it('should preserve error context when throwing', async () => {
 		mockExecuteFunctions.continueOnFail.mockReturnValue(false);
-		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation(
-			(parameter: string) => (parameter === 'resource' ? 'image' : 'generate'),
+		(mockExecuteFunctions.getNodeParameter as jest.Mock).mockImplementation((parameter: string) =>
+			parameter === 'resource' ? 'image' : 'generate',
 		);
 		mockExecuteFunctions.getInputData.mockReturnValue([{ json: {} }]);
-		const errorWithContext = new Error('Some error') as Error & { context: Record<string, unknown> };
+		const errorWithContext = new Error('Some error') as Error & {
+			context: Record<string, unknown>;
+		};
 		errorWithContext.context = { someKey: 'someValue' };
 		mockImageGenerate.mockRejectedValue(errorWithContext);
 

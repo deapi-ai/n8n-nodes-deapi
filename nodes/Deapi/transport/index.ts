@@ -13,34 +13,35 @@ type RequestParameters = {
 };
 
 export async function apiRequest(
-  this: IExecuteFunctions | ILoadOptionsFunctions,
-  method: IHttpRequestMethods,
-  endpoint: string,
-  parameters?: RequestParameters,
+	this: IExecuteFunctions | ILoadOptionsFunctions,
+	method: IHttpRequestMethods,
+	endpoint: string,
+	parameters?: RequestParameters,
 ) {
-  const { body, qs, option, headers } = parameters ?? {};
+	const { body, qs, option, headers } = parameters ?? {};
 
-  const url = `https://api.deapi.ai/api/v1/client${endpoint}`;
+	const url = `https://api.deapi.ai/api/v1/client${endpoint}`;
 
-  const options = {
-    headers,
-    method,
-    body,
-    qs,
-    url,
-    json: true,
-  };
+	const options = {
+		headers,
+		method,
+		body,
+		qs,
+		url,
+		json: true,
+	};
 
-  if (option && Object.keys(option).length !== 0) {
-    Object.assign(options, option);
-  }
+	if (option && Object.keys(option).length !== 0) {
+		Object.assign(options, option);
+	}
 
-  try {
-    return await this.helpers.httpRequestWithAuthentication.call(this, 'deApi', options);
-  } catch (error) {
-    if (error.httpCode === '429') {
-      error.message = 'Rate limit exceeded. Upgrade to Premium at https://deapi.ai/billing to remove daily caps.'
-    }
-    throw error;
-  }
+	try {
+		return await this.helpers.httpRequestWithAuthentication.call(this, 'deApi', options);
+	} catch (error) {
+		if (error.httpCode === '429') {
+			error.message =
+				'Rate limit exceeded. Upgrade to Premium at https://deapi.ai/billing to remove daily caps.';
+		}
+		throw error;
+	}
 }
