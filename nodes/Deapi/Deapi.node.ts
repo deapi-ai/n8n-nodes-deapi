@@ -143,8 +143,6 @@ export class Deapi implements INodeType {
 					},
 				};
 
-				res.status(200).send('OK');
-
 				return {
 					workflowData: [[response]],
 				};
@@ -154,8 +152,6 @@ export class Deapi implements INodeType {
 			const response: INodeExecutionData = {
 				json: body,
 			};
-
-			res.status(200).send('OK');
 
 			return {
 				workflowData: [[response]],
@@ -167,9 +163,7 @@ export class Deapi implements INodeType {
 			json: body,
 		};
 
-		res.status(200).send('OK');
-
-		// Return 200 OK and resume execution with the webhook data
+		// Resume execution with the webhook data (n8n sends 200 via responseMode: 'onReceived')
 		return {
 			workflowData: [[response]],
 		};

@@ -160,9 +160,6 @@ export class DeapiTrigger implements INodeType {
 			};
 		}
 
-		// Event matches, trigger the workflow
-		res.status(200).send('OK');
-
 		// For completed jobs, check if we should download binary result
 		if (event === 'job.completed') {
 			const downloadBinary = this.getNodeParameter('downloadBinary') as boolean;

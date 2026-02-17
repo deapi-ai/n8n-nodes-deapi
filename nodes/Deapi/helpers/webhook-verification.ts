@@ -30,13 +30,13 @@ export function verifyWebhookSignature(
 	const message = `${timestamp}.${rawBody}`;
 	const expected = 'sha256=' + crypto.createHmac('sha256', secret).update(message).digest('hex');
 
-	// Verify signature exists and has correct length
-	if (!signature || signature.length !== expected.length) {
+	// Timing-safe comparison using buffer byte lengths
+	const sigBuf = Buffer.from(signature ?? '');
+	const expBuf = Buffer.from(expected);
+	if (sigBuf.length !== expBuf.length) {
 		return false;
 	}
-
-	// Timing-safe comparison
-	if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
+	if (!crypto.timingSafeEqual(sigBuf, expBuf)) {
 		return false;
 	}
 

@@ -119,7 +119,7 @@ describe('Deapi webhook handler', () => {
 	describe('job.completed event', () => {
 		it('should download binary and return workflowData when result_url is present', async () => {
 			const resultUrl = 'https://storage.deapi.ai/results/image.png';
-			const { mock, statusMock } = createWebhookMock('job.completed', {
+			const { mock } = createWebhookMock('job.completed', {
 				result_url: resultUrl,
 				job_request_id: 'req_123',
 			});
@@ -137,7 +137,6 @@ describe('Deapi webhook handler', () => {
 
 			const result = await deapi.webhook.call(mock);
 
-			expect(statusMock).toHaveBeenCalledWith(200);
 			expect(result.workflowData).toBeDefined();
 			expect(result.workflowData![0][0].binary).toEqual({ data: preparedBinaryData });
 			expect(result.workflowData![0][0].json).toEqual({
@@ -147,14 +146,13 @@ describe('Deapi webhook handler', () => {
 		});
 
 		it('should return JSON data when result_url is not present', async () => {
-			const { mock, statusMock } = createWebhookMock('job.completed', {
+			const { mock } = createWebhookMock('job.completed', {
 				job_request_id: 'req_456',
 				status: 'done',
 			});
 
 			const result = await deapi.webhook.call(mock);
 
-			expect(statusMock).toHaveBeenCalledWith(200);
 			expect(result.workflowData).toBeDefined();
 			expect(result.workflowData![0][0].json).toEqual({
 				event: 'job.completed',
@@ -169,7 +167,7 @@ describe('Deapi webhook handler', () => {
 
 	describe('job.failed event', () => {
 		it('should return error data as JSON', async () => {
-			const { mock, statusMock } = createWebhookMock('job.failed', {
+			const { mock } = createWebhookMock('job.failed', {
 				job_request_id: 'req_789',
 				error_code: 'ERR_001',
 				error_message: 'Generation failed',
@@ -177,7 +175,6 @@ describe('Deapi webhook handler', () => {
 
 			const result = await deapi.webhook.call(mock);
 
-			expect(statusMock).toHaveBeenCalledWith(200);
 			expect(result.workflowData).toBeDefined();
 			expect(result.workflowData![0][0].json).toEqual({
 				event: 'job.failed',
