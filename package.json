@@ -40,11 +40,18 @@
         "prepublishOnly": "n8n-node prerelease",
         "test": "jest"
     },
+    "bugs": {
+        "url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
     "files": [
         "dist",
         "!**/*.test.js",
         "!**/*.test.d.ts",
-        "!**/*.test.js.map"
+        "!**/*.test.js.map",
+        "!dist/tsconfig.tsbuildinfo"
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,

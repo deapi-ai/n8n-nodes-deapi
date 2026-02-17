@@ -68,6 +68,16 @@ This approach ensures efficient resource usage - the workflow doesn't actively p
 - Tested with n8n version 2.3.4
 - Webhook-based operations require n8n to be accessible via HTTPS
 
+## Example Workflow
+
+An example n8n workflow demonstrating all available operations is included in [`examples/deAPI_guide.json`](examples/deAPI_guide.json). Import it into your n8n instance to get started quickly:
+
+1. Download [`deAPI_guide.json`](https://raw.githubusercontent.com/deapi-ai/n8n-nodes-deapi/main/examples/deAPI_guide.json) from the GitHub repository
+2. In n8n, go to **Workflows** > **Import from File**
+3. Select the downloaded `deAPI_guide.json`
+4. Set up your deAPI credentials (API Key + Webhook Secret)
+5. Explore the example nodes and sticky notes for usage instructions
+
 ## Resources
 
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
