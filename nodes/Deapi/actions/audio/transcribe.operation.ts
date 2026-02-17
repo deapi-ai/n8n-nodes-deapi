@@ -109,5 +109,5 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	// Return the current input data
 	// When the webhook is called, the webhook() method will provide the actual output
-	return this.getInputData();
+	return [this.getInputData()[i]];
 }

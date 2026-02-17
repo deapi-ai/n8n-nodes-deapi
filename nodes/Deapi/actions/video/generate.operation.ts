@@ -419,7 +419,12 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 				break;
 		}
 	} else {
-		[width, height] = size.split('x').map(Number);
+		const parts = size.split('x').map(Number);
+		width = parts[0];
+		height = parts[1];
+		if (!Number.isFinite(width) || !Number.isFinite(height)) {
+			throw new Error(`Invalid resolution format: "${size}". Expected "WIDTHxHEIGHT".`);
+		}
 	}
 
 	// Negative Prompt
@@ -511,5 +516,5 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	// Return the current input data
 	// When the webhook is called, the webhook() method will provide the actual output
-	return this.getInputData();
+	return [this.getInputData()[i]];
 }

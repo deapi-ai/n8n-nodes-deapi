@@ -32,7 +32,7 @@ const properties: INodeProperties[] = [
 		options: [
 			{
 				displayName: 'Negative Prompt',
-				name: 'negative_prompt',
+				name: 'negativePrompt',
 				type: 'string',
 				placeholder: 'e.g. blur, darkness, noise',
 				description: 'A negative prompt to boost',
@@ -65,7 +65,7 @@ export const description = updateDisplayOptions(displayOptions, properties);
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 	const prompt = this.getNodeParameter('prompt', i) as string;
 	const options = this.getNodeParameter('options', i);
-	const negativePrompt = options.negative_prompt as string | undefined;
+	const negativePrompt = options.negativePrompt as string | undefined;
 	const refImage = options.binaryPropertyName as string | undefined;
 
 	let image: VideoPromptBoosterRequest['image'] = null;

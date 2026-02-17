@@ -39,7 +39,20 @@ export async function router(this: IExecuteFunctions) {
 			);
 	}
 
-	for (let i = 0; i < items.length; i++) {
+	// Operations that use putExecutionToWait can only process one item per execution,
+	// because each execution supports only a single webhook callback to resume.
+	const waitingOperations = new Set([
+		'image:generate',
+		'image:removeBackground',
+		'image:upscale',
+		'video:generate',
+		'video:transcribe',
+		'audio:transcribe',
+	]);
+	const isWaiting = waitingOperations.has(`${resource}:${operation}`);
+	const itemCount = isWaiting ? 1 : items.length;
+
+	for (let i = 0; i < itemCount; i++) {
 		try {
 			const responseData = await execute.call(this, i);
 			returnData.push(...responseData);

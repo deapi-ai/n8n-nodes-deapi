@@ -446,8 +446,8 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 				height = 720;
 				break;
 			case 'ZImageTurbo_INT8-portrait':
-				width = 1152;
-				height = 2048;
+				width = 1216;
+				height = 1520;
 				break;
 			case 'Flux_2_Klein_4B_BF16-portrait':
 				width = 1216;
@@ -460,7 +460,12 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 				break;
 		}
 	} else {
-		[width, height] = size.split('x').map(Number);
+		const parts = size.split('x').map(Number);
+		width = parts[0];
+		height = parts[1];
+		if (!Number.isFinite(width) || !Number.isFinite(height)) {
+			throw new Error(`Invalid resolution format: "${size}". Expected "WIDTHxHEIGHT".`);
+		}
 	}
 
 	// Steps
@@ -512,5 +517,5 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	// Return the current input data
 	// When the webhook is called, the webhook() method will provide the actual output
-	return this.getInputData();
+	return [this.getInputData()[i]];
 }

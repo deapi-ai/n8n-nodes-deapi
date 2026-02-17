@@ -15,6 +15,11 @@ export function verifyWebhookSignature(
 	timestamp: string | undefined,
 	rawBody: string,
 ): boolean {
+	// Reject empty or missing secret
+	if (!secret) {
+		return false;
+	}
+
 	// Verify timestamp is within 5 minutes
 	const now = Math.floor(Date.now() / 1000);
 	if (!timestamp || Math.abs(now - parseInt(timestamp)) > 300) {

@@ -94,5 +94,5 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 		},
 	});
 
-	return this.getInputData();
+	return [this.getInputData()[i]];
 }
