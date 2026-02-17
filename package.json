@@ -41,7 +41,10 @@
         "test": "jest"
     },
     "files": [
-        "dist"
+        "dist",
+        "!**/*.test.js",
+        "!**/*.test.d.ts",
+        "!**/*.test.js.map"
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
