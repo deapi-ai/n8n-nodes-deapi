@@ -18,7 +18,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/AleGlowa/n8n-nodes-deapi.git"
+        "url": "https://github.com/deapi-ai/n8n-nodes-deapi.git"
     },
     "scripts": {
         "build": "n8n-node build",

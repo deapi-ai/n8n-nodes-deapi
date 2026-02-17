@@ -2,7 +2,7 @@
 	"node": "n8n-nodes-deapi-trigger",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
-	"categories": ["AI", "Marketing & Content"],
+	"categories": ["AI"],
 	"resources": {
 		"credentialDocumentation": [
 			{

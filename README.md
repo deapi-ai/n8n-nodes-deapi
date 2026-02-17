@@ -70,6 +70,7 @@ This approach ensures efficient resource usage - the workflow doesn't actively p
 - [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
 - [deAPI Documentation](https://docs.deapi.ai/)
 - [deAPI Website](https://deapi.ai/)
+- [GitHub Repository](https://github.com/deapi-ai/n8n-nodes-deapi)
 
 ## License
 
