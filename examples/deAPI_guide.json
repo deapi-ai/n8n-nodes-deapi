@@ -8,12 +8,8 @@
         "width": 384
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        848,
-        640
-      ],
+      "position": [528, 272],
       "typeVersion": 1,
-      "id": "30ba92b1-4451-42af-a2d5-ea412e09356e",
       "name": "Sticky Note"
     },
     {
@@ -23,74 +19,9 @@
         "width": 432
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1264,
-        640
-      ],
+      "position": [944, 272],
       "typeVersion": 1,
-      "id": "d16f7b92-3132-47ea-9fe9-eb3ccf1469ba",
       "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "prompt": "a red bull can",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        1824,
-        800
-      ],
-      "id": "1b7dab78-a891-495e-97b0-106d824ecfb4",
-      "name": "Text-to-image",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "prompt": "a red bull can",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        1824,
-        1008
-      ],
-      "id": "af1b5c5b-caef-467d-a426-791d3f963e48",
-      "name": "Image prompt booster",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "prompt": "={{ $json.prompt }}",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2000,
-        1008
-      ],
-      "id": "b42894c8-bfb7-4ab5-adb1-8c8766283925",
-      "name": "Text-to-image1",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -100,35 +31,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1776,
-        960
-      ],
+      "position": [1456, 592],
       "typeVersion": 1,
-      "id": "94c53ea4-d4c2-4761-b335-53c05f135eb8",
       "name": "Sticky Note2"
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "operation": "boostVideo",
-        "prompt": "a spaceship",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        1824,
-        1248
-      ],
-      "id": "c46b2096-dc43-46f9-83ee-61992299f683",
-      "name": "Video prompt booster",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -138,79 +43,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        1776,
-        1200
-      ],
+      "position": [1456, 832],
       "typeVersion": 1,
-      "id": "1e46a7c7-291d-4eeb-9a84-81e81f9254d2",
       "name": "Sticky Note3"
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "prompt": "a spaceship",
-        "ratio": "landscape",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2032,
-        640
-      ],
-      "id": "94b18dfc-678a-4153-ab8c-1214b880bb40",
-      "name": "Text-to-video",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "prompt": "a spaceship",
-        "ratio": "landscape",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2000,
-        1248
-      ],
-      "id": "a9fed431-3fbf-44b6-b364-f1917ea793ab",
-      "name": "Text-to-video1",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "source": "image",
-        "prompt": "a spaceship",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2032,
-        800
-      ],
-      "id": "886fa90e-d0d1-4271-9037-dfaa7e492182",
-      "name": "Image-to-video",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -219,59 +54,8 @@
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        2272,
-        640
-      ],
-      "id": "36aa59ce-3df6-4647-b566-88ea0ff576b9",
+      "position": [1952, 272],
       "name": "Read image"
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "operation": "boostVideo",
-        "prompt": "a spaceship",
-        "options": {
-          "binaryPropertyName": "data"
-        }
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2448,
-        640
-      ],
-      "id": "259d750d-9943-4d5a-bfec-efc7cd6fe4d7",
-      "name": "Video prompt booster1",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "source": "image",
-        "prompt": "={{ $json.prompt }}",
-        "firstFrame": "={{ $('Read image').item.binary.data }}",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2624,
-        640
-      ],
-      "id": "1c199e26-e550-4566-8b6a-e0f9bbe8ed42",
-      "name": "Image-to-video1",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -281,63 +65,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2224,
-        592
-      ],
+      "position": [1904, 224],
       "typeVersion": 1,
-      "id": "5a88a344-abb1-4206-8bc3-e1bfb4f83288",
       "name": "Sticky Note4"
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "operation": "boostVideo",
-        "prompt": "a spaceship",
-        "options": {
-          "binaryPropertyName": "data"
-        }
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2448,
-        912
-      ],
-      "id": "eae98b0e-63d1-42e0-a202-14aebd63739c",
-      "name": "Video prompt booster2",
-      "executeOnce": true,
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "source": "image",
-        "prompt": "={{ $json.prompt }}",
-        "firstFrame": "={{ $('Read first and last frame').first().binary.data }}",
-        "options": {
-          "lastFrame": "={{ $('Read first and last frame').last().binary.data }}"
-        }
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2624,
-        912
-      ],
-      "id": "87575c2b-8944-46ca-8e30-99ed4f081770",
-      "name": "Image-to-video2",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -346,11 +76,7 @@
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        2272,
-        912
-      ],
-      "id": "ada8583b-c0b7-49f8-aa27-1805810f55ee",
+      "position": [1952, 544],
       "name": "Read first and last frame"
     },
     {
@@ -361,54 +87,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2224,
-        832
-      ],
+      "position": [1904, 464],
       "typeVersion": 1,
-      "id": "96999f10-9f2a-416a-b688-99efe5949920",
       "name": "Sticky Note5"
-    },
-    {
-      "parameters": {},
-      "type": "CUSTOM.deapiTrigger",
-      "typeVersion": 1,
-      "position": [
-        1824,
-        640
-      ],
-      "id": "7560f7c0-1ea8-4bd7-b4a8-db87abdb21a0",
-      "name": "On completed job",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "events": [
-          "jobCompleted",
-          "jobProcessing",
-          "jobFailed"
-        ],
-        "downloadBinary": false
-      },
-      "type": "CUSTOM.deapiTrigger",
-      "typeVersion": 1,
-      "position": [
-        2272,
-        1408
-      ],
-      "id": "c3070c92-1b56-4a08-8614-2e0729f1befa",
-      "name": "On any job status",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -417,11 +98,7 @@
       },
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
-      "position": [
-        2656,
-        1280
-      ],
-      "id": "c84b5d92-9ca0-4b50-9218-d4ce5c4b6515",
+      "position": [2336, 912],
       "name": "Get result"
     },
     {
@@ -443,8 +120,7 @@
                     "operator": {
                       "type": "string",
                       "operation": "equals"
-                    },
-                    "id": "cb64b652-87c1-4573-8b09-bd40ebedacfe"
+                    }
                   }
                 ],
                 "combinator": "and"
@@ -462,7 +138,6 @@
                 },
                 "conditions": [
                   {
-                    "id": "fb00a137-6955-43e1-b61f-5a9cc5d1f366",
                     "leftValue": "={{ $json.data.status }}",
                     "rightValue": "processing",
                     "operator": {
@@ -486,7 +161,6 @@
                 },
                 "conditions": [
                   {
-                    "id": "a383bff2-c0b7-492e-8a2c-27b07540800b",
                     "leftValue": "={{ $json.data.status }}",
                     "rightValue": "failed",
                     "operator": {
@@ -506,11 +180,7 @@
       },
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
-      "position": [
-        2448,
-        1392
-      ],
-      "id": "ab76f5c5-e250-460d-b2b6-9d4141853fdb",
+      "position": [2128, 1024],
       "name": "Check job status"
     },
     {
@@ -521,58 +191,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2224,
-        1104
-      ],
+      "position": [1904, 736],
       "typeVersion": 1,
-      "id": "008819f7-04cd-4448-bfdb-9f4ae6615d85",
       "name": "Sticky Note6"
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "prompt": "a standing cat",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2864,
-        704
-      ],
-      "id": "8a31e8a8-386c-4c7f-840f-f61ead226005",
-      "name": "Image prompt booster1",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "operation": "boostVideo",
-        "prompt": "The cat walks towards the viewer",
-        "options": {
-          "binaryPropertyName": "data"
-        }
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3280,
-        704
-      ],
-      "id": "fefe8bc8-4150-4a64-8adb-3f647752364b",
-      "name": "Video prompt booster3",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -582,123 +203,9 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2816,
-        592
-      ],
+      "position": [2496, 224],
       "typeVersion": 1,
-      "id": "28334029-f201-4425-a626-3b897d6d646e",
       "name": "Sticky Note7"
-    },
-    {
-      "parameters": {
-        "prompt": "={{ $json.prompt }}",
-        "ratio": "portrait",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3072,
-        704
-      ],
-      "id": "05ef55a7-f472-4a9b-bde9-45e2e5188dd7",
-      "name": "Text-to-image2",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "source": "image",
-        "prompt": "={{ $json.prompt }}",
-        "firstFrame": "={{ $('Text-to-image2').item.binary.data }}",
-        "ratio": "portrait",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3488,
-        704
-      ],
-      "id": "7390ef42-c191-49e3-9394-be18276194f4",
-      "name": "Image-to-video3",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "prompt",
-        "prompt": "a standing cat",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3008,
-        1008
-      ],
-      "id": "84012f70-9aba-4c81-ba72-1269ee5609b4",
-      "name": "Image prompt booster2",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "prompt": "={{ $json.prompt }}",
-        "ratio": "portrait",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3216,
-        1008
-      ],
-      "id": "42ba2868-c518-475a-b5c5-3edcf75fc603",
-      "name": "Text-to-image3",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "source": "image",
-        "prompt": "The cat walks towards the viewer",
-        "ratio": "portrait",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3424,
-        1008
-      ],
-      "id": "40d3124a-f7d4-4092-b08e-1bc7553ba7f7",
-      "name": "Image-to-video4",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -708,12 +215,8 @@
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2960,
-        896
-      ],
+      "position": [2640, 528],
       "typeVersion": 1,
-      "id": "39e1c1fa-4049-4961-8609-97babc5f29e0",
       "name": "Sticky Note8"
     },
     {
@@ -725,11 +228,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        1744,
-        464
-      ],
-      "id": "7bfc2889-2e35-44f4-8ada-a7193d6e4dd7",
+      "position": [1424, 96],
       "name": "Sticky Note9"
     },
     {
@@ -739,56 +238,8 @@
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        896,
-        256
-      ],
-      "id": "bc2782d6-aef7-468c-b6d5-3031b3bb1301",
+      "position": [576, -112],
       "name": "Read video"
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "operation": "transcribe",
-        "videoUrl": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        896,
-        432
-      ],
-      "id": "43c90870-cf41-4dbc-b011-1f95fc152c9e",
-      "name": "Transcribe video from url",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
-        "resource": "video",
-        "operation": "transcribe",
-        "source": "binary",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        1104,
-        256
-      ],
-      "id": "63aec5b4-49d0-4c79-b969-ca0b8bc068f1",
-      "name": "Transcribe video from file",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -797,32 +248,8 @@
       },
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
-      "position": [
-        1312,
-        256
-      ],
-      "id": "6d60c2e7-d318-45fe-b45e-3d7a8951d77e",
+      "position": [992, -112],
       "name": "Extract transcription file"
-    },
-    {
-      "parameters": {
-        "resource": "audio",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        1104,
-        80
-      ],
-      "id": "efccb37e-bcd8-4595-be3d-834c9a2deb82",
-      "name": "Transcribe audio from file",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
     },
     {
       "parameters": {
@@ -831,11 +258,7 @@
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        896,
-        80
-      ],
-      "id": "50791d05-1244-4df2-b658-afa886c09329",
+      "position": [576, -288],
       "name": "Read audio"
     },
     {
@@ -845,11 +268,7 @@
       },
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
-      "position": [
-        1312,
-        80
-      ],
-      "id": "17b99cd9-0006-446a-b1e5-37c5f6d7497f",
+      "position": [992, -288],
       "name": "Extract transcription file1"
     },
     {
@@ -861,11 +280,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        832,
-        -64
-      ],
-      "id": "8217aad3-e443-457c-8d2f-ffe169595a29",
+      "position": [512, -432],
       "name": "Sticky Note10"
     },
     {
@@ -875,79 +290,27 @@
       },
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
-      "position": [
-        1104,
-        432
-      ],
-      "id": "5a2fa673-9a77-4b57-a5b3-f7669db187c6",
+      "position": [784, 64],
       "name": "Extract transcription file2"
     },
     {
       "parameters": {
-        "operation": "removeBackground",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        2000,
-        1456
-      ],
-      "id": "515be815-f7d6-446d-8509-f6a5bb68c3ed",
-      "name": "Remove background",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
         "fileSelector": "/home/node/.n8n-files/spaceship1.png",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        1824,
-        1456
-      ],
-      "id": "aa77e7d4-d94d-4339-b698-ea68077efeaa",
+      "position": [1504, 1088],
       "name": "Read image1"
     },
     {
       "parameters": {
-        "operation": "upscale",
-        "options": {}
-      },
-      "type": "CUSTOM.deapi",
-      "typeVersion": 1,
-      "position": [
-        3152,
-        1200
-      ],
-      "id": "a54fe9b3-6b34-44c8-a35a-9ab28abe24eb",
-      "name": "Upscale an image",
-      "credentials": {
-        "deApi": {
-          "id": "",
-          "name": ""
-        }
-      }
-    },
-    {
-      "parameters": {
         "fileSelector": "/home/node/.n8n-files/spaceship1.png",
         "options": {}
       },
       "type": "n8n-nodes-base.readWriteFile",
       "typeVersion": 1.1,
-      "position": [
-        2976,
-        1200
-      ],
-      "id": "e2ad868b-b93c-4449-a368-a87534d58021",
+      "position": [2656, 832],
       "name": "Read image2"
     },
     {
@@ -957,11 +320,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        2944,
-        1360
-      ],
-      "id": "0bbaf5ca-05c8-4a0c-9511-0298327a30d8",
+      "position": [2624, 992],
       "name": "Sticky Note11"
     },
     {
@@ -972,11 +331,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        3328,
-        1360
-      ],
-      "id": "2c3ee7ce-7713-44e9-9146-437988a91361",
+      "position": [3008, 992],
       "name": "Sticky Note12"
     },
     {
@@ -987,11 +342,7 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        3328,
-        1520
-      ],
-      "id": "50f41b88-c113-4579-a5ec-282f634cb584",
+      "position": [3008, 1152],
       "name": "Sticky Note13"
     },
     {
@@ -1002,244 +353,392 @@
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [
-        2976,
-        1536
-      ],
-      "id": "487adf83-6761-4ce2-857b-3c954bd7c8fe",
+      "position": [2656, 1168],
       "name": "Sticky Note14"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-deapi.deapiTrigger",
+      "typeVersion": 1,
+      "position": [1504, 272],
+      "name": "deAPI Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "transcribe",
+        "source": "binary",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [784, -112],
+      "name": "Transcribe a video from file"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "transcribe",
+        "videoUrl": "https://www.youtube.com/watch?v=9N3aNS6Kk1o",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [576, 64],
+      "name": "Transcribe a video from url"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "prompt": "a red bull can",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1712, 272],
+      "name": "Text-to-video"
+    },
+    {
+      "parameters": {
+        "prompt": "a red bull can",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1504, 432],
+      "name": "Text-to-image"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "source": "image",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1712, 432],
+      "name": "Image-to-video"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [784, -288],
+      "name": "Transcribe an audio from file"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "prompt": "a spaceship",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1504, 640],
+      "name": "Image prompt booster"
+    },
+    {
+      "parameters": {
+        "prompt": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1680, 640],
+      "name": "Text-to-image1"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "operation": "boostVideo",
+        "prompt": "a clown dances",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1504, 880],
+      "name": "Video prompt booster"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "prompt": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1680, 880],
+      "name": "Text-to-video2"
+    },
+    {
+      "parameters": {
+        "operation": "removeBackground",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [1680, 1088],
+      "name": "Remove background1"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "operation": "boostVideo",
+        "prompt": "The spaceship drops instantly",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2128, 272],
+      "name": "Video prompt booster1"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "source": "image",
+        "prompt": "={{ $json.prompt }}",
+        "firstFrame": "={{ $('Read image').item.binary.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2304, 272],
+      "name": "Image-to-video1"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "operation": "boostVideo",
+        "prompt": "a solar flare hits the spaceships",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2128, 544],
+      "executeOnce": true,
+      "name": "Video prompt booster2"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "source": "image",
+        "prompt": "={{ $json.prompt }}",
+        "firstFrame": "={{ $('Read first and last frame').first().binary.data }}",
+        "options": {
+          "lastFrame": "={{ $('Read first and last frame').last().binary.data }}"
+        }
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2304, 544],
+      "name": "Image-to-video2"
+    },
+    {
+      "parameters": {
+        "events": ["jobCompleted", "jobProcessing", "jobFailed"]
+      },
+      "type": "n8n-nodes-deapi.deapiTrigger",
+      "typeVersion": 1,
+      "position": [1952, 1040],
+      "name": "On any job status"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "prompt": "dog and cat smile to each other",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2544, 336],
+      "name": "Image prompt booster1"
+    },
+    {
+      "parameters": {
+        "prompt": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2752, 336],
+      "name": "Text-to-image2"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "operation": "boostVideo",
+        "prompt": "The cat punches a dog",
+        "options": {
+          "binaryPropertyName": "data"
+        }
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2960, 336],
+      "name": "Video prompt booster3"
+    },
+    {
+      "parameters": {
+        "resource": "prompt",
+        "prompt": "an elephant with human-shaped chocolates on safari",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2688, 640],
+      "name": "Image prompt booster2"
+    },
+    {
+      "parameters": {
+        "prompt": "={{ $json.prompt }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2896, 640],
+      "name": "Text-to-image3"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "source": "image",
+        "prompt": "={{ $json.prompt }}",
+        "firstFrame": "={{ $('Text-to-image2').item.binary.data }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [3168, 336],
+      "name": "Image-to-video3"
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "source": "image",
+        "prompt": "The elephant eats the chocolates with joy",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [3104, 640],
+      "name": "Image-to-video4"
+    },
+    {
+      "parameters": {
+        "operation": "upscale",
+        "options": {}
+      },
+      "type": "n8n-nodes-deapi.deapi",
+      "typeVersion": 1,
+      "position": [2832, 832],
+      "name": "Upscale an image"
     }
   ],
-  "pinData": {},
   "connections": {
-    "Image prompt booster": {
-      "main": [
-        [
-          {
-            "node": "Text-to-image1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Video prompt booster": {
-      "main": [
-        [
-          {
-            "node": "Text-to-video1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read image": {
-      "main": [
-        [
-          {
-            "node": "Video prompt booster1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Video prompt booster1": {
-      "main": [
-        [
-          {
-            "node": "Image-to-video1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Video prompt booster2": {
-      "main": [
-        [
-          {
-            "node": "Image-to-video2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read first and last frame": {
-      "main": [
-        [
-          {
-            "node": "Video prompt booster2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "On any job status": {
-      "main": [
-        [
-          {
-            "node": "Check job status",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Check job status": {
       "main": [
-        [
-          {
-            "node": "Get result",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Image prompt booster1": {
-      "main": [
-        [
-          {
-            "node": "Text-to-image2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Video prompt booster3": {
-      "main": [
-        [
-          {
-            "node": "Image-to-video3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Text-to-image2": {
-      "main": [
-        [
-          {
-            "node": "Video prompt booster3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Image prompt booster2": {
-      "main": [
-        [
-          {
-            "node": "Text-to-image3",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Text-to-image3": {
-      "main": [
-        [
-          {
-            "node": "Image-to-video4",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Read video": {
-      "main": [
-        [
-          {
-            "node": "Transcribe video from file",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Transcribe video from file": {
-      "main": [
-        [
-          {
-            "node": "Extract transcription file",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Get result", "type": "main", "index": 0}]
       ]
     },
     "Read audio": {
       "main": [
-        [
-          {
-            "node": "Transcribe audio from file",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Transcribe an audio from file", "type": "main", "index": 0}]
       ]
     },
-    "Transcribe audio from file": {
+    "Transcribe an audio from file": {
       "main": [
-        [
-          {
-            "node": "Extract transcription file1",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Extract transcription file1", "type": "main", "index": 0}]
       ]
     },
-    "Transcribe video from url": {
+    "Read video": {
       "main": [
-        [
-          {
-            "node": "Extract transcription file2",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Transcribe a video from file", "type": "main", "index": 0}]
+      ]
+    },
+    "Transcribe a video from url": {
+      "main": [
+        [{"node": "Extract transcription file2", "type": "main", "index": 0}]
+      ]
+    },
+    "Image prompt booster": {
+      "main": [
+        [{"node": "Text-to-image1", "type": "main", "index": 0}]
+      ]
+    },
+    "Video prompt booster": {
+      "main": [
+        [{"node": "Text-to-video2", "type": "main", "index": 0}]
       ]
     },
     "Read image1": {
       "main": [
-        [
-          {
-            "node": "Remove background",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Remove background1", "type": "main", "index": 0}]
+      ]
+    },
+    "Read image": {
+      "main": [
+        [{"node": "Video prompt booster1", "type": "main", "index": 0}]
+      ]
+    },
+    "Video prompt booster1": {
+      "main": [
+        [{"node": "Image-to-video1", "type": "main", "index": 0}]
+      ]
+    },
+    "Read first and last frame": {
+      "main": [
+        [{"node": "Video prompt booster2", "type": "main", "index": 0}]
+      ]
+    },
+    "Video prompt booster2": {
+      "main": [
+        [{"node": "Image-to-video2", "type": "main", "index": 0}]
+      ]
+    },
+    "Transcribe a video from file": {
+      "main": [
+        [{"node": "Extract transcription file", "type": "main", "index": 0}]
+      ]
+    },
+    "Image prompt booster1": {
+      "main": [
+        [{"node": "Text-to-image2", "type": "main", "index": 0}]
+      ]
+    },
+    "Text-to-image2": {
+      "main": [
+        [{"node": "Video prompt booster3", "type": "main", "index": 0}]
+      ]
+    },
+    "Video prompt booster3": {
+      "main": [
+        [{"node": "Image-to-video3", "type": "main", "index": 0}]
+      ]
+    },
+    "Image prompt booster2": {
+      "main": [
+        [{"node": "Text-to-image3", "type": "main", "index": 0}]
+      ]
+    },
+    "Text-to-image3": {
+      "main": [
+        [{"node": "Image-to-video4", "type": "main", "index": 0}]
       ]
     },
     "Read image2": {
       "main": [
-        [
-          {
-            "node": "Upscale an image",
-            "type": "main",
-            "index": 0
-          }
-        ]
+        [{"node": "Upscale an image", "type": "main", "index": 0}]
       ]
     }
   },
-  "active": false,
   "settings": {
-    "executionOrder": "v1",
-    "availableInMCP": false
-  },
-  "meta": {
-    "templateCredsSetupCompleted": true
-  },
-  "tags": []
+    "executionOrder": "v1"
+  }
 }
