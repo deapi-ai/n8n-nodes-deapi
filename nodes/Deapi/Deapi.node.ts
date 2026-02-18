@@ -30,6 +30,19 @@ export class Deapi implements INodeType {
 		defaults: {
 			name: 'deAPI',
 		},
+		codex: {
+			categories: ['AI'],
+			subcategories: {
+				AI: ['Image', 'Video', 'Audio', 'Language Models'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://docs.deapi.ai/',
+					},
+				],
+			},
+		},
 		usableAsTool: true,
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
@@ -44,7 +57,7 @@ export class Deapi implements INodeType {
 				name: 'default',
 				httpMethod: 'POST',
 				responseMode: 'onReceived',
-				path: '',
+				path: 'webhook',
 				restartWebhook: true,
 			},
 		],

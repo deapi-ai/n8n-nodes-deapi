@@ -23,6 +23,19 @@ export class DeapiTrigger implements INodeType {
 		defaults: {
 			name: 'deAPI Trigger',
 		},
+		codex: {
+			categories: ['AI'],
+			subcategories: {
+				AI: ['Image', 'Video', 'Audio'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://docs.deapi.ai/',
+					},
+				],
+			},
+		},
 		usableAsTool: true,
 		credentials: [
 			{
