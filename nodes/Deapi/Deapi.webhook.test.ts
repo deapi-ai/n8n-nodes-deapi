@@ -1,3 +1,4 @@
+/* eslint-disable @n8n/community-nodes/no-restricted-imports */
 import * as crypto from 'crypto';
 import type { IBinaryData, IWebhookFunctions } from 'n8n-workflow';
 import { mockDeep } from 'jest-mock-extended';

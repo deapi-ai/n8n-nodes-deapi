@@ -1,11 +1,3 @@
 import { config } from '@n8n/node-cli/eslint';
 
-export default [
-	...config,
-	{
-		files: ['**/*.test.ts'],
-		rules: {
-			'@n8n/community-nodes/no-restricted-imports': 'off',
-		},
-	},
-];
+export default config;

@@ -36,13 +36,12 @@
         "dev": "n8n-node dev",
         "lint": "n8n-node lint",
         "lint:fix": "n8n-node lint --fix",
-        "test": "jest"
+        "test": "jest",
+        "prepublishOnly": "n8n-node prerelease"
     },
     "bugs": {
         "url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
     },
-    "main": "dist/nodes/index.js",
-    "types": "dist/nodes/index.d.ts",
     "engines": {
         "node": ">=18.0.0"
     },
@@ -55,7 +54,7 @@
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": false,
+        "strict": true,
         "credentials": [
             "dist/credentials/DeApi.credentials.js"
         ],

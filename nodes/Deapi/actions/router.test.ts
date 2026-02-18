@@ -1,3 +1,4 @@
+/* eslint-disable @n8n/community-nodes/no-restricted-imports */
 import { mockDeep } from 'jest-mock-extended';
 import type { IExecuteFunctions } from 'n8n-workflow';
 
