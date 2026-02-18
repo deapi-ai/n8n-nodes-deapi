@@ -42,7 +42,7 @@ export class Deapi implements INodeType {
 				name: 'default',
 				httpMethod: 'POST',
 				responseMode: 'onReceived',
-				path: 'webhook',
+				path: '',
 				restartWebhook: true,
 			},
 		],
