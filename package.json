@@ -55,7 +55,6 @@
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": true,
         "credentials": [
             "dist/credentials/DeApi.credentials.js"
         ],

@@ -43,7 +43,6 @@ export class Deapi implements INodeType {
 				],
 			},
 		},
-		usableAsTool: true,
 		inputs: [NodeConnectionTypes.Main],
 		outputs: [NodeConnectionTypes.Main],
 		credentials: [

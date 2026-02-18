@@ -36,7 +36,6 @@ export class DeapiTrigger implements INodeType {
 				],
 			},
 		},
-		usableAsTool: true,
 		credentials: [
 			{
 				name: 'deApi',
