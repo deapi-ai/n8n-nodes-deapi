@@ -38,8 +38,9 @@ export async function apiRequest(
 	try {
 		return await this.helpers.httpRequestWithAuthentication.call(this, 'deApi', options);
 	} catch (error) {
-		if (error.httpCode === '429') {
-			error.message =
+		const err = error as Error & { httpCode?: string };
+		if (err.httpCode === '429') {
+			err.message =
 				'Rate limit exceeded. Upgrade to Premium at https://deapi.ai/billing to remove daily caps.';
 		}
 		throw error;
