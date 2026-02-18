@@ -497,8 +497,9 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 	// Put execution to wait FIRST - this registers the waiting webhook
 	await this.putExecutionToWait(waitTill);
 
-	// NOW get the webhook resume URL (after the webhook is registered)
-	const webhookUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	// Get the execution resume URL and append webhook path to match node's webhook config
+	const resumeUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	const webhookUrl = `${resumeUrl}/webhook`;
 
 	// Build the request body with webhook URL
 	const body: TextToImageRequest = {

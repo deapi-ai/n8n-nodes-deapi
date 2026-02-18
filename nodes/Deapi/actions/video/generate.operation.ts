@@ -445,8 +445,9 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 	// Put execution to wait FIRST - this registers the waiting webhook
 	await this.putExecutionToWait(waitTill);
 
-	// NOW get the webhook resume URL (after the webhook is registered)
-	const webhookUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	// Construct the webhook URL for deAPI to call back
+	const resumeUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	const webhookUrl = `${resumeUrl}/webhook`;
 
 	if (source === 'text') {
 		// Text-to-video: use JSON body

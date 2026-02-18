@@ -63,7 +63,8 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	await this.putExecutionToWait(waitTill);
 
-	const webhookUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	const resumeUrl = this.evaluateExpression('{{ $execution.resumeUrl }}', i) as string;
+	const webhookUrl = `${resumeUrl}/webhook`;
 
 	const { fileContent, contentType, filename } = await getBinaryDataFile(
 		this,
