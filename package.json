@@ -41,10 +41,12 @@
     "bugs": {
         "url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
     },
+    "main": "index.js",
     "engines": {
         "node": ">=18.0.0"
     },
     "files": [
+        "index.js",
         "dist",
         "!**/*.test.js",
         "!**/*.test.d.ts",
