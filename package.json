@@ -31,31 +31,21 @@
         "url": "https://github.com/deapi-ai/n8n-nodes-deapi.git"
     },
     "scripts": {
-        "build": "n8n-node build",
+        "build": "tsc && gulp build:icons",
+        "prepublishOnly": "npm run build",
         "build:watch": "tsc --watch",
         "dev": "n8n-node dev",
-        "lint": "n8n-node lint",
-        "lint:fix": "n8n-node lint --fix",
         "test": "jest"
     },
     "bugs": {
         "url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
     },
-    "main": "index.js",
-    "engines": {
-        "node": ">=18.0.0"
-    },
+    "main": "dist/index.js",
     "files": [
-        "index.js",
-        "dist",
-        "!**/*.test.js",
-        "!**/*.test.d.ts",
-        "!**/*.test.js.map",
-        "!dist/tsconfig.tsbuildinfo"
+        "dist"
     ],
     "n8n": {
         "n8nNodesApiVersion": 1,
-        "strict": true,
         "credentials": [
             "dist/credentials/DeApi.credentials.js"
         ],
@@ -65,18 +55,20 @@
         ]
     },
     "devDependencies": {
-        "@n8n/node-cli": "*",
-        "@types/jest": "^30.0.0",
-        "eslint": "9.32.0",
+        "@types/node": "^22.0.0",
+        "gulp": "^4.0.2",
+        "n8n-workflow": "^1.0.0",
+        "typescript": "^5.3.0",
         "jest": "^30.2.0",
         "jest-mock-extended": "^4.0.0",
-        "n8n-workflow": "*",
         "prettier": "3.6.2",
-        "release-it": "^19.0.4",
         "ts-jest": "^29.4.6",
-        "typescript": "5.9.2"
+        "@types/jest": "^30.0.0"
     },
     "peerDependencies": {
-        "n8n-workflow": "*"
+        "n8n-workflow": "^1.0.0"
+    },
+    "engines": {
+        "node": ">=22.0.0"
     }
 }
