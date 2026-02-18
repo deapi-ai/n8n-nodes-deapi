@@ -6,7 +6,6 @@ import type {
 	IWebhookFunctions,
 	IWebhookResponseData,
 } from 'n8n-workflow';
-import { NodeConnectionTypes } from 'n8n-workflow';
 
 import { verifyWebhookSignature } from './helpers/webhook-verification';
 import { downloadAndPrepareBinaryData } from './helpers/binary-data';
@@ -23,19 +22,6 @@ export class DeapiTrigger implements INodeType {
 		defaults: {
 			name: 'deAPI Trigger',
 		},
-		codex: {
-			categories: ['AI'],
-			subcategories: {
-				AI: ['Image', 'Video', 'Audio'],
-			},
-			resources: {
-				primaryDocumentation: [
-					{
-						url: 'https://docs.deapi.ai/',
-					},
-				],
-			},
-		},
 		credentials: [
 			{
 				name: 'deApi',
@@ -43,7 +29,7 @@ export class DeapiTrigger implements INodeType {
 			},
 		],
 		inputs: [],
-		outputs: [NodeConnectionTypes.Main],
+		outputs: ['main'],
 		webhooks: [
 			{
 				name: 'default',

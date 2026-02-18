@@ -7,7 +7,6 @@ import type {
 	INodeExecutionData,
 	IDataObject,
 } from 'n8n-workflow';
-import { NodeConnectionTypes } from 'n8n-workflow';
 
 import * as image from './actions/image';
 import * as video from './actions/video';
@@ -30,21 +29,8 @@ export class Deapi implements INodeType {
 		defaults: {
 			name: 'deAPI',
 		},
-		codex: {
-			categories: ['AI'],
-			subcategories: {
-				AI: ['Image', 'Video', 'Audio', 'Language Models'],
-			},
-			resources: {
-				primaryDocumentation: [
-					{
-						url: 'https://docs.deapi.ai/',
-					},
-				],
-			},
-		},
-		inputs: [NodeConnectionTypes.Main],
-		outputs: [NodeConnectionTypes.Main],
+		inputs: ['main'],
+		outputs: ['main'],
 		credentials: [
 			{
 				name: 'deApi',
