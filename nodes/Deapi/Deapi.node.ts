@@ -29,6 +29,7 @@ export class Deapi implements INodeType {
 		defaults: {
 			name: 'deAPI',
 		},
+		usableAsTool: true,
 		inputs: ['main'],
 		outputs: ['main'],
 		credentials: [

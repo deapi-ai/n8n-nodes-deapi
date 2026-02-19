@@ -22,6 +22,7 @@ export class DeapiTrigger implements INodeType {
 		defaults: {
 			name: 'deAPI Trigger',
 		},
+		usableAsTool: undefined,
 		credentials: [
 			{
 				name: 'deApi',
@@ -97,7 +98,9 @@ export class DeapiTrigger implements INodeType {
 				webhookData.webhookUrl = webhookUrl;
 
 				// Log instructions for the user
-				this.logger.info(`[deAPI] Configure this webhook URL in your deAPI dashboard: ${webhookUrl}`);
+				this.logger.info(
+					`[deAPI] Configure this webhook URL in your deAPI dashboard: ${webhookUrl}`,
+				);
 				this.logger.info(`[deAPI] Visit: https://deapi.ai/settings/webhooks`);
 
 				return true;
