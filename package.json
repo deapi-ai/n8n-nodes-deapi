@@ -36,9 +36,7 @@
 		"dev": "n8n-node dev",
 		"lint": "n8n-node lint",
 		"lint:fix": "n8n-node lint --fix",
-		"test": "jest",
-		"release": "n8n-node release",
-		"prepublishOnly": "n8n-node prerelease"
+		"test": "jest"
 	},
 	"bugs": {
 		"url": "https://github.com/deapi-ai/n8n-nodes-deapi/issues"
