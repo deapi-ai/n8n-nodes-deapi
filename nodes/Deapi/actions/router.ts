@@ -58,19 +58,18 @@ export async function router(this: IExecuteFunctions) {
 			returnData.push(...responseData);
 		} catch (error) {
 			if (this.continueOnFail()) {
-				const message = error instanceof Error ? error.message : String(error);
-				returnData.push({ json: { error: message }, pairedItem: { item: i } });
+				returnData.push({ json: { error: error.message }, pairedItem: { item: i } });
 				continue;
 			} else {
 				// Adding `itemIndex` allows other workflows to handle this error
-				if (error instanceof Error && 'context' in error && error.context) {
-					(error.context as Record<string, unknown>).itemIndex = i;
+				if (error.context) {
+					error.context.itemIndex = i;
 					throw error;
 				}
 
-				throw new NodeOperationError(this.getNode(), error as Error, {
+				throw new NodeOperationError(this.getNode(), error, {
 					itemIndex: i,
-					description: error instanceof Error ? (error as Error & { description?: string }).description : undefined,
+					description: error.description,
 				});
 			}
 		}
