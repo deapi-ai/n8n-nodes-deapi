@@ -140,6 +140,7 @@ export class Deapi implements INodeType {
 					binary: {
 						data: binaryData,
 					},
+					pairedItem: { item: 0 },
 				};
 
 				return {
@@ -150,6 +151,7 @@ export class Deapi implements INodeType {
 			// No result_url (e.g. transcription results) - return JSON directly
 			const response: INodeExecutionData = {
 				json: body,
+				pairedItem: { item: 0 },
 			};
 
 			return {
@@ -160,6 +162,7 @@ export class Deapi implements INodeType {
 		// For failed jobs, return error data as JSON
 		const response: INodeExecutionData = {
 			json: body,
+			pairedItem: { item: 0 },
 		};
 
 		// Resume execution with the webhook data (n8n sends 200 via responseMode: 'onReceived')
