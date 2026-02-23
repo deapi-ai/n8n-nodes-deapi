@@ -2,6 +2,7 @@ import {
 	IExecuteFunctions,
 	INodeExecutionData,
 	INodeProperties,
+	NodeOperationError,
 	updateDisplayOptions,
 } from 'n8n-workflow';
 
@@ -423,7 +424,11 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 		width = parts[0];
 		height = parts[1];
 		if (parts.length !== 2 || !Number.isFinite(width) || !Number.isFinite(height)) {
-			throw new Error(`Invalid resolution format: "${size}". Expected "WIDTHxHEIGHT".`);
+			throw new NodeOperationError(
+				this.getNode(),
+				`Invalid resolution format: "${size}". Expected "WIDTHxHEIGHT".`,
+				{ itemIndex: i },
+			);
 		}
 	}
 
