@@ -55,7 +55,7 @@ const properties: INodeProperties[] = [
 				value: 'portrait',
 			},
 		],
-		default: 'square',
+		default: 'landscape',
 		noDataExpression: true,
 	},
 	{
