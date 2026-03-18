@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0] - 2026-03-18
+
+### Added
+- Text-to-speech generation (Kokoro, Chatterbox, Qwen3 TTS Custom Voice, Qwen3 TTS Voice Design)
+- Voice cloning from reference audio (Qwen3 TTS VoiceClone)
+- Video generation from audio (LTX-2.3 22B Distilled INT8)
+- New video generation model: LTX-2.3 22B Distilled INT8
+
+### Changed
+- Default aspect ratio for video generation changed to landscape
+
 ## [0.1.0] - 2026-02-17
 
 ### Added
