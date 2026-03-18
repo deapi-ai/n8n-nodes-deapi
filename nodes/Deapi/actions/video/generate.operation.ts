@@ -63,7 +63,7 @@ const properties: INodeProperties[] = [
 		name: 'model',
 		type: 'options',
 		description: 'The model to use for video generation',
-		default: 'Ltx2_19B_Dist_FP8',
+		default: 'Ltx2_3_22B_Dist_INT8',
 		required: true,
 		options: [
 			{
@@ -73,6 +73,10 @@ const properties: INodeProperties[] = [
 			{
 				name: 'LTX-2 19B Distilled FP8',
 				value: 'Ltx2_19B_Dist_FP8',
+			},
+			{
+				name: 'LTX-2.3 22B Distilled INT8',
+				value: 'Ltx2_3_22B_Dist_INT8',
 			},
 		],
 	},
@@ -96,7 +100,7 @@ const properties: INodeProperties[] = [
 				value: 'portrait',
 			},
 		],
-		default: 'square',
+		default: 'landscape',
 		noDataExpression: true,
 	},
 	{
@@ -148,7 +152,7 @@ const properties: INodeProperties[] = [
 				},
 				displayOptions: {
 					show: {
-						'/model': ['Ltx2_19B_Dist_FP8'],
+						'/model': ['Ltx2_19B_Dist_FP8', 'Ltx2_3_22B_Dist_INT8'],
 					},
 				},
 				default: 120,
@@ -263,7 +267,7 @@ const properties: INodeProperties[] = [
 				],
 				displayOptions: {
 					show: {
-						'/model': ['Ltx2_19B_Dist_FP8'],
+						'/model': ['Ltx2_19B_Dist_FP8', 'Ltx2_3_22B_Dist_INT8'],
 						'/ratio': ['landscape'],
 					},
 				},
@@ -286,7 +290,7 @@ const properties: INodeProperties[] = [
 				],
 				displayOptions: {
 					show: {
-						'/model': ['Ltx2_19B_Dist_FP8'],
+						'/model': ['Ltx2_19B_Dist_FP8', 'Ltx2_3_22B_Dist_INT8'],
 						'/ratio': ['portrait'],
 					},
 				},
@@ -313,7 +317,7 @@ const properties: INodeProperties[] = [
 				],
 				displayOptions: {
 					show: {
-						'/model': ['Ltx2_19B_Dist_FP8'],
+						'/model': ['Ltx2_19B_Dist_FP8', 'Ltx2_3_22B_Dist_INT8'],
 						'/ratio': ['square'],
 					},
 				},
@@ -358,7 +362,7 @@ const displayOptions = {
 export const description = updateDisplayOptions(displayOptions, properties);
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
-	type Model = 'Ltxv_13B_0_9_8_Distilled_FP8' | 'Ltx2_19B_Dist_FP8';
+	type Model = 'Ltxv_13B_0_9_8_Distilled_FP8' | 'Ltx2_19B_Dist_FP8' | 'Ltx2_3_22B_Dist_INT8';
 	type Ratio = 'square' | 'landscape' | 'portrait';
 
 	const source = this.getNodeParameter('source', i) as 'text' | 'image';
@@ -372,7 +376,7 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	// FPS, steps, guidance
 	let fps, steps, guidance;
-	if (model === 'Ltx2_19B_Dist_FP8') {
+	if (model === 'Ltx2_19B_Dist_FP8' || model === 'Ltx2_3_22B_Dist_INT8') {
 		fps = 24;
 		steps = 8;
 		guidance = 1.0;
@@ -393,14 +397,17 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 	let width: number, height: number;
 	if (size == null) {
 		switch (`${model}-${ratio}`) {
+			case 'Ltx2_3_22B_Dist_INT8-square':
 			case 'Ltx2_19B_Dist_FP8-square':
 				width = 768;
 				height = 768;
 				break;
+			case 'Ltx2_3_22B_Dist_INT8-landscape':
 			case 'Ltx2_19B_Dist_FP8-landscape':
 				width = 1024;
 				height = 576;
 				break;
+			case 'Ltx2_3_22B_Dist_INT8-portrait':
 			case 'Ltx2_19B_Dist_FP8-portrait':
 				width = 720;
 				height = 900;

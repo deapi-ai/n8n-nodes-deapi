@@ -36,7 +36,7 @@ To use this node, you need to configure the following credentials:
 
 | Operation | Description | Models |
 |-----------|-------------|--------|
-| **Generate** | Generate a video from text or image(s) | LTX-Video 0.9.8, LTX-2 19B |
+| **Generate** | Generate a video from text or image(s) | LTX-Video 0.9.8, LTX-2 19B, LTX-2.3 22B |
 | **Generate From Audio** | Generate a video conditioned on an audio file and text prompt | LTX-2 22B |
 | **Transcribe** | Transcribe video to text (YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
 
