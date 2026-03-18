@@ -47,6 +47,7 @@ export async function router(this: IExecuteFunctions) {
 		'image:upscale',
 		'video:generate',
 		'video:transcribe',
+		'audio:generateSpeech',
 		'audio:transcribe',
 	]);
 	const isWaiting = waitingOperations.has(`${resource}:${operation}`);

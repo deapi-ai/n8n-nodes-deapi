@@ -43,6 +43,19 @@ export interface BoosterResponse extends IDataObject {
 	negative_prompt: string | null;
 }
 
+export interface TextToSpeechRequest extends IDataObject {
+	text: string;
+	model: string;
+	mode: string;
+	lang: string;
+	voice?: string;
+	instruct?: string;
+	speed: number;
+	format: string;
+	sample_rate: number;
+	webhook_url: string;
+}
+
 /* Form-data content type request interfaces */
 export type VideoPromptBoosterRequest = {
 	prompt: string;
