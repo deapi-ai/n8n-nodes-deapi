@@ -1,9 +1,10 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 import * as generate from './generate.operation';
+import * as generateFromAudio from './generateFromAudio.operation';
 import * as transcribe from './transcribe.operation';
 
-export { generate, transcribe };
+export { generate, generateFromAudio, transcribe };
 
 export const description: INodeProperties[] = [
 	{
@@ -17,6 +18,12 @@ export const description: INodeProperties[] = [
 				value: 'generate',
 				action: 'Generate a video',
 				description: 'Generates a video from text prompt or image(s)',
+			},
+			{
+				name: 'Generate From Audio',
+				value: 'generateFromAudio',
+				action: 'Generate from audio',
+				description: 'Generates a video conditioned on an audio file and text prompt',
 			},
 			{
 				name: 'Transcribe a Video',
@@ -33,5 +40,6 @@ export const description: INodeProperties[] = [
 		},
 	},
 	...generate.description,
+	...generateFromAudio.description,
 	...transcribe.description,
 ];

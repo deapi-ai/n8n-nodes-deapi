@@ -92,6 +92,20 @@ export type ImageToVideoRequest = {
 	webhook_url: string;
 };
 
+export type AudioToVideoRequest = {
+	prompt: string;
+	model: string;
+	audio: FormdataFileValue;
+	width: number;
+	height: number;
+	frames: number;
+	seed: number;
+	fps: number;
+	first_frame_image: FormdataFileValue | null;
+	last_frame_image: FormdataFileValue | null;
+	webhook_url: string;
+};
+
 export type VideoFileToTextRequest = {
 	video: FormdataFileValue;
 	include_ts: boolean;
