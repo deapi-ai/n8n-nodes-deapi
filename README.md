@@ -43,6 +43,8 @@ To use this node, you need to configure the following credentials:
 
 | Operation | Description | Models |
 |-----------|-------------|--------|
+| **Clone a Voice** | Clone a voice from a reference audio and generate speech | Qwen3 TTS VoiceClone |
+| **Generate a Speech** | Convert text to speech audio | Kokoro, Chatterbox, Qwen3 TTS Custom Voice, Qwen3 TTS Voice Design |
 | **Transcribe** | Transcribe audio file to text | Whisper Large V3 |
 
 ### Prompt

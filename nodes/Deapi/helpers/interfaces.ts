@@ -57,6 +57,19 @@ export interface TextToSpeechRequest extends IDataObject {
 }
 
 /* Form-data content type request interfaces */
+export type VoiceCloneRequest = {
+	text: string;
+	model: string;
+	mode: string;
+	lang: string;
+	speed: number;
+	format: string;
+	sample_rate: number;
+	ref_audio: FormdataFileValue;
+	ref_text: string | null;
+	webhook_url: string;
+};
+
 export type VideoPromptBoosterRequest = {
 	prompt: string;
 	negative_prompt: string | null;
