@@ -1,3 +1,5 @@
+![Banner image](https://github.com/user-attachments/assets/398eeb5d-cbf7-452c-96ae-825850c32730)
+
 # n8n-nodes-deapi
 
 [![npm version](https://img.shields.io/npm/v/n8n-nodes-deapi.svg)](https://www.npmjs.com/package/n8n-nodes-deapi)
