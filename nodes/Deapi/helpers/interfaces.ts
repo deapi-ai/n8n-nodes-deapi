@@ -131,3 +131,15 @@ export type UpscaleRequest = {
 	model: string;
 	webhook_url: string;
 };
+
+export type VideoReplaceRequest = {
+	video: FormdataFileValue;
+	ref_image: FormdataFileValue;
+	model: string;
+	prompt: string | null;
+	width: number | null;
+	height: number | null;
+	steps: number;
+	seed: number;
+	webhook_url: string;
+};

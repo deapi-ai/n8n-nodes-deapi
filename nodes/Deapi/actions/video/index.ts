@@ -2,9 +2,10 @@ import type { INodeProperties } from 'n8n-workflow';
 
 import * as generate from './generate.operation';
 import * as generateFromAudio from './generateFromAudio.operation';
+import * as replace from './replace.operation';
 import * as transcribe from './transcribe.operation';
 
-export { generate, generateFromAudio, transcribe };
+export { generate, generateFromAudio, replace, transcribe };
 
 export const description: INodeProperties[] = [
 	{
@@ -26,6 +27,12 @@ export const description: INodeProperties[] = [
 				description: 'Generates a video conditioned on an audio file and text prompt',
 			},
 			{
+				name: 'Replace Person in Video',
+				value: 'replace',
+				action: 'Replace person in video',
+				description: 'Replaces a person in a video with a character from a reference image',
+			},
+			{
 				name: 'Transcribe a Video',
 				value: 'transcribe',
 				action: 'Transcribe a video',
@@ -41,5 +48,6 @@ export const description: INodeProperties[] = [
 	},
 	...generate.description,
 	...generateFromAudio.description,
+	...replace.description,
 	...transcribe.description,
 ];

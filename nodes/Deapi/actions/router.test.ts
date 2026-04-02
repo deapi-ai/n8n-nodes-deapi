@@ -15,6 +15,7 @@ describe('Deapi router', () => {
 	const mockImageUpscale = jest.spyOn(image.upscale, 'execute');
 	const mockVideoGenerate = jest.spyOn(video.generate, 'execute');
 	const mockVideoGenerateFromAudio = jest.spyOn(video.generateFromAudio, 'execute');
+	const mockVideoReplace = jest.spyOn(video.replace, 'execute');
 	const mockVideoTranscribe = jest.spyOn(video.transcribe, 'execute');
 	const mockAudioCloneVoice = jest.spyOn(audio.cloneVoice, 'execute');
 	const mockAudioGenerateSpeech = jest.spyOn(audio.generateSpeech, 'execute');
@@ -28,6 +29,7 @@ describe('Deapi router', () => {
 		[mockImageUpscale, 'image', 'upscale'],
 		[mockVideoGenerate, 'video', 'generate'],
 		[mockVideoGenerateFromAudio, 'video', 'generateFromAudio'],
+		[mockVideoReplace, 'video', 'replace'],
 		[mockVideoTranscribe, 'video', 'transcribe'],
 		[mockAudioCloneVoice, 'audio', 'cloneVoice'],
 		[mockAudioGenerateSpeech, 'audio', 'generateSpeech'],

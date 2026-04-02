@@ -2,7 +2,7 @@ import { AllEntities } from 'n8n-workflow';
 
 type NodeMap = {
 	image: 'generate' | 'removeBackground' | 'upscale';
-	video: 'generate' | 'generateFromAudio' | 'transcribe';
+	video: 'generate' | 'generateFromAudio' | 'replace' | 'transcribe';
 	audio: 'cloneVoice' | 'generateSpeech' | 'transcribe';
 	prompt: 'boostImage' | 'boostVideo';
 };
