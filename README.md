@@ -40,6 +40,7 @@ To use this node, you need to configure the following credentials:
 |-----------|-------------|--------|
 | **Generate** | Generate a video from text or image(s) | LTX-Video 0.9.8, LTX-2 19B, LTX-2.3 22B |
 | **Generate From Audio** | Generate a video conditioned on an audio file and text prompt | LTX-2 22B |
+| **Replace Person in Video** | Replace a person in a video with a character from a reference image | Wan2.2-Animate 14B |
 | **Transcribe** | Transcribe video to text (YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
 
 ### Audio

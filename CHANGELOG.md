@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.0] - 2026-04-01
+
+### Added
+- Video person replacement with a reference character image (Wan2.2-Animate 14B)
+
 ## [0.2.0] - 2026-03-18
 
 ### Added
