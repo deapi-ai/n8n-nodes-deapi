@@ -49,6 +49,7 @@ export async function router(this: IExecuteFunctions) {
 		'video:generateFromAudio',
 		'video:replace',
 		'video:transcribe',
+		'video:upscale',
 		'audio:cloneVoice',
 		'audio:generateSpeech',
 		'audio:transcribe',

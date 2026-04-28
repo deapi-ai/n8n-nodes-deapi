@@ -4,8 +4,9 @@ import * as generate from './generate.operation';
 import * as generateFromAudio from './generateFromAudio.operation';
 import * as replace from './replace.operation';
 import * as transcribe from './transcribe.operation';
+import * as upscale from './upscale.operation';
 
-export { generate, generateFromAudio, replace, transcribe };
+export { generate, generateFromAudio, replace, transcribe, upscale };
 
 export const description: INodeProperties[] = [
 	{
@@ -38,6 +39,12 @@ export const description: INodeProperties[] = [
 				action: 'Transcribe a video',
 				description: 'Transcribes audio from a video to text',
 			},
+			{
+				name: 'Upscale a Video',
+				value: 'upscale',
+				action: 'Upscale a video',
+				description: 'Upscales a video using AI super-resolution models',
+			},
 		],
 		default: 'generate',
 		displayOptions: {
@@ -50,4 +57,5 @@ export const description: INodeProperties[] = [
 	...generateFromAudio.description,
 	...replace.description,
 	...transcribe.description,
+	...upscale.description,
 ];

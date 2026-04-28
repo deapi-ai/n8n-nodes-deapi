@@ -143,3 +143,10 @@ export type VideoReplaceRequest = {
 	seed: number;
 	webhook_url: string;
 };
+
+export type VideoUpscaleRequest = {
+	video: FormdataFileValue;
+	model: string;
+	scale: number | null;
+	webhook_url: string;
+};
