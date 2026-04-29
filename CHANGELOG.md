@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.0] - 2026-04-29
+
+### Added
+- Video upscaling (RealESRGAN Video, FlashVSR Tiny)
+
 ## [0.3.0] - 2026-04-01
 
 ### Added

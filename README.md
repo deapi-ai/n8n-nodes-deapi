@@ -42,6 +42,7 @@ To use this node, you need to configure the following credentials:
 | **Generate From Audio** | Generate a video conditioned on an audio file and text prompt | LTX-2 22B |
 | **Replace Person in Video** | Replace a person in a video with a character from a reference image | Wan2.2-Animate 14B |
 | **Transcribe** | Transcribe video to text (YouTube, Twitch, X, Kick URLs or file upload) | Whisper Large V3 |
+| **Upscale** | Upscale video resolution using AI super-resolution | RealESRGAN Video, FlashVSR Tiny |
 
 ### Audio
 
